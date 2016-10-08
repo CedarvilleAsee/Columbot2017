@@ -2,7 +2,9 @@
 //#include <lineFollow.h>
 #include "pinNumbers.h"
 #include "constants.h"
+#include "wheels.h"
 
+using namespace wheels;
 
 void setup() {
   // put your setup code here, to run once:
@@ -10,13 +12,13 @@ void setup() {
         pinMode(LINE_SENSOR_PINS[i], INPUT);
   }
 
-  /*
+  
     //LEDs on shield
     pinMode(LEDG, OUTPUT);
     pinMode(LEDR, OUTPUT);
     digitalWrite(LEDG, HIGH);
     digitalWrite(LEDR, HIGH);
-  */
+  
     //setup steering servo and point it straight
     //steeringMotor.attach(STEERING_PIN);
     //steeringMotor.write(NOSE_CENTER);
@@ -52,15 +54,15 @@ void setup() {
 
 
     //setup ring dispensing motor
-    pinMode(WHEEL_PWM_FR, OUTPUT);
-    analogWrite(WHEEL_PWM_FR, 0);
-    pinMode(WHEEL_DIR_BR_F, OUTPUT);
-    digitalWrite(WHEEL_DIR_FR_B, HIGH);
-    digitalWrite(WHEEL_DIR_FR_F, LOW);
+    //pinMode(WHEEL_PWM_FR, OUTPUT);
+    //analogWrite(WHEEL_PWM_FR, 0);
+    //pinMode(WHEEL_DIR_BR_F, OUTPUT);
+    //digitalWrite(WHEEL_DIR_FR_B, HIGH);
+    //digitalWrite(WHEEL_DIR_FR_F, LOW);
     
     //enable ring dispensing motor controller
-    pinMode(WHEEL_PWM_R_STBY, OUTPUT);
-    digitalWrite(WHEEL_PWM_R_STBY, HIGH);
+    //pinMode(WHEEL_PWM_R_STBY, OUTPUT);
+    //digitalWrite(WHEEL_PWM_R_STBY, HIGH);
 
     //misc line sensor pin that does not get init in contructor for some reason
     //pinMode(39, INPUT);
@@ -81,9 +83,9 @@ void setup() {
     #endif
     */
     
-    pinMode(BUTTON1, INPUT_PULLUP);
-    pinMode(BUTTON2, INPUT_PULLUP);
-    while(digitalRead(BUTTON1));
+    //pinMode(BUTTON1, INPUT_PULLUP);
+    //pinMode(BUTTON2, INPUT_PULLUP);
+    //while(digitalRead(BUTTON1));
 
     /*
     long t = millis();
@@ -116,11 +118,9 @@ void setup() {
      //delay(100);
     
     //Go forward for 2/10 of a second
-    //driveWheels(150, 150);
-
-    digitalWrite(WHEEL_DIR_BL_F, HIGH);
-    digitalWrite(WHEEL_DIR_BL_B, HIGH);
-    delay(1000);
+    driveWheels(150, 150);
+    delay(50000);
+    //STOPIT();
     //lastangle = NOSE_CENTER + 3;
     //setNose(NOSE_CENTER-5);
     //ringServo.write(0);
