@@ -1,28 +1,23 @@
-#include <SoftwareSerial.h>
 
-SoftwareSerial Serial7Segment(17, 16); //RX pin, TX pin
 
 int cycles = 0;
 
 void setup() {
-  
 
-  //Serial.begin(9600);
- // Serial.println("OpenSegment Example Code");
-  
+cycles = 0;
 
-  Serial7Segment.begin(9600); //Talk to the Serial7Segment at 9600 bps
-  Serial7Segment.write('v'); //Reset the display - this forces the cursor to return to the beginning of the display
-  Serial7Segment.write(0x7a);
-  Serial7Segment.write(0xff);
+  Serial.begin(14400); //Talk to the Serial7Segment at 9600 bps
+  Serial2.begin(14400);
+  Serial2.write('v'); //Reset the display - this forces the cursor to return to the beginning of the display
+  Serial2.write(0x7a);
+  Serial2.write(0xff);
   
 }
 
 void loop() 
 {
   cycles++; //Counting cycles! Yay!
-  Serial.print("Cycle: ");
-  Serial.println(cycles);
+  
   
   char tempString[10]; //Used for sprintf
   sprintf(tempString, "%4d", cycles); //Convert deciSecond into a string that is right adjusted
@@ -38,9 +33,13 @@ void loop()
   //To fix this, send a 'v' character or look at how to control the digit placement
   //https://github.com/sparkfun/Serial7SegmentDisplay/wiki/Basic-Usage#wiki-cursor
 
-  Serial7Segment.print(tempString); //Send serial string out the soft serial port to the S7S
+  //Serial2.print(tempString); //Send serial string out the soft serial port to the S7S
 
-  delay(1000);
+  if (cycles % 10000 == 0) {  
+    char tempString[10]; //Used for sprintf
+    sprintf(tempString, "%4d", cycles / 10000);  
+    Serial2.print(tempString); 
+  }
+  
 }
-
 
