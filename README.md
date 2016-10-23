@@ -18,7 +18,7 @@ public for all of our team to access.
 
 A git repository maintains the whole history of all our changes to anything that
 you have put into the repository. To make a change to the git repository, we
-first need to **clone** it on your own local computer. This is done by issuing th
+first need to **clone** it on your `this` own local computer. This is done by issuing th
 command:
 
     git clone <https://url.to.your/repository>
@@ -155,7 +155,7 @@ your own by running:
 If all has gone well, you should be up to date on your local repository. You
 must push your changes in order to be up to date on your github fork.
 
-## If you get stuck
+### If you get stuck
 
 Note that I have not gone extremely in depth, whatever it may seem. Git is a
 little complicated at first, but experience will make you better at it. You
@@ -168,3 +168,21 @@ probably not need them for our purposes.
 
 Remember that you can always come to me for help if you don't know what to do,
 or you get stuck on something.
+
+## Tentative States
+
+We currently have a list of possible states that we could be in for our
+two-robot solution. These are not necessarily in order.
+
+  * Start
+  * Line follow center
+  * Left turn
+  * Right turn
+  * Wall follow
+  * Avoid rocks
+  * Line up for drop
+  * Drop and pickup
+  * Pickup and drop
+  * Turn around
+  * Move to line
+  * Dump barrels
