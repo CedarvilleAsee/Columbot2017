@@ -29,7 +29,7 @@ or, specifically for our project, you can execute
 
 Once the repository has been cloned on your computer, you can make changes to
 the folder containing the files however you want. You may notice that there is a
-`.git` folder in the repository; **don't touch it**. This folder contains all
+`.git` folder in the repository; **don't touch it**. This folder contains  fsall
 the information that git keeps track of; if you change it, your local git
 repository will likely be messed up, and you will have to re-clone it on to your
 computer. (You won't necessarily see this folder...it will always be there, but
@@ -107,14 +107,7 @@ process so that it is easier to remember.
   for a while, you should put your changes back onto github. Make sure you've
   committed all your changes. Then **push** your repository back up to github.
 
-That's all; I hope that didn't seem too complicated. You should definitely try
-to get good at using git; if you ever get involved with a team programming
-project in the future, you'll very likely have to use it again. It's good
-practice to use git even for personal projects as well.
-[https://git-scm.com/book/en/v2](The Git Book) is a great resource for learning
-how to use git. There are a lot of other features that git provides, but we will
-probably not need them for our purposes.
-
+That's all; I hope that didn't seem too complicated.
 ## Github
 
 Now that you now a little something about git, I'll explain how Github will tie
@@ -140,3 +133,38 @@ The way we want you to do it is the following:
   accept the pull request. For most things in this project, I expect there won't
   be very much discussion, because we will probably discuss things prior to
   starting work on them.
+
+There is one matter that you must keep track of. After you have forked, your
+repository won't keep up to date as the main repository moves along. To
+periodically make it the same, you need to **merge** the central repo with your
+own. To do so, go to your local repo's directory and add the central repo as an
+*upstream* repository:
+
+    git remote add upstream https://github.com/CedarvilleAsee/Columbot2017
+
+Typing
+
+    git remote -v
+
+will show you all your remote repositories, but you don't need to worry much
+about that. After you have done this, you can merge the upstream repository with
+your own by running:
+
+    git fetch upstream
+
+If all has gone well, you should be up to date on your local repository. You
+must push your changes in order to be up to date on your github fork.
+
+## If you get stuck
+
+Note that I have not gone extremely in depth, whatever it may seem. Git is a
+little complicated at first, but experience will make you better at it. You
+should definitely try to get good at using git; if you ever get involved with a
+team programming project in the future, you'll very likely have to use it again.
+It's good practice to use git even for personal projects as well.
+[https://git-scm.com/book/en/v2](The Git Book) is a great resource for learning
+how to use git. There are a lot of other features that git provides, but we will
+probably not need them for our purposes.
+
+Remember that you can always come to me for help if you don't know what to do,
+or you get stuck on something. fs
