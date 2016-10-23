@@ -114,3 +114,29 @@ practice to use git even for personal projects as well.
 [https://git-scm.com/book/en/v2](The Git Book) is a great resource for learning
 how to use git. There are a lot of other features that git provides, but we will
 probably not need them for our purposes.
+
+## Github
+
+Now that you now a little something about git, I'll explain how Github will tie
+into all of this. I've been telling you that to put your changes onto github,
+you would just push your changes to
+[https://github.com/CedarvilleAsee/Columbot2017]. However, if we all did that,
+it would get confusing, because some people might make a change, and it would
+break something, messing everyone else up. Or perhaps two people would make
+changes to the same thing, and then someone would lose what they did because
+they did their's first, and they were overwritten. Also, not everyone has the
+right permissions to be able to push changes to our central repository.
+
+The way we want you to do it is the following:
+
+- Go to the github repository for our project.
+- Click the "fork" button; make sure you are signed in.
+- Once you have forked our central repo, you should make all changes in your own
+  forked repo.
+- Once you have finished the thing you are working on, and believe that it
+  should be added into the central repository, you should click the "Submit pull
+  request" button on your repo. This will create a pull request on the main
+  repo, and the team memebers can all participate on discussion of whether to
+  accept the pull request. For most things in this project, I expect there won't
+  be very much discussion, because we will probably discuss things prior to
+  starting work on them.
