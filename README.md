@@ -167,4 +167,4 @@ how to use git. There are a lot of other features that git provides, but we will
 probably not need them for our purposes.
 
 Remember that you can always come to me for help if you don't know what to do,
-or you get stuck on something. fs
+or you get stuck on something.
