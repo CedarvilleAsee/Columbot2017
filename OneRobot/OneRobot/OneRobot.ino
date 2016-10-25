@@ -118,8 +118,8 @@ void setup() {
      //delay(100);
     
     //Go forward for 2/10 of a second
-    driveWheels(150, 150);
-    delay(50000);
+    driveWheels(100, 100);
+    delay(100000);
     //STOPIT();
     //lastangle = NOSE_CENTER + 3;
     //setNose(NOSE_CENTER-5);

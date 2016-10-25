@@ -44,8 +44,8 @@
 #define WHEEL_PWM_FL      7
 #define WHEEL_PWM_BR      2
 #define WHEEL_PWM_BL      3
-//#define WHEEL_PWM_B_STBY  31
-//#define WHEEL_PWM_R_STBY  33
+#define WHEEL_PWM_B_STBY  31
+#define WHEEL_PWM_R_STBY  33
 
 
 #endif 
