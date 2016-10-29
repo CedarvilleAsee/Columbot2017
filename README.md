@@ -172,7 +172,7 @@ or you get stuck on something.
 ## Tentative States
 
 We currently have a list of possible states that we could be in for our
-two-robot solution. These are not necessarily in order.
+two-robot solution. These are not necessarily in order, nor are they comprehensive.
 
   * Start
   * Line follow center
