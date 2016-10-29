@@ -6,12 +6,18 @@
 
 using namespace wheels;
 
-void setup() {
-  // put your setup code here, to run once:
-  for (int i = 0; i < NUM_OF_SENSORS; ++i) {
-        pinMode(LINE_SENSOR_PINS[i], INPUT);
-  }
+Servo firstServe;
+Servo secondServe;
+Servo thridServe;
+Servo fourthServe;
+Servo fifthServe;
+Servo sixthServe;
+Servo seventhServe;
+Servo eightServe;
+Servo ninthServe;
 
+
+void setup() {
   
     //LEDs on shield
     pinMode(LEDG, OUTPUT);

@@ -7,6 +7,7 @@
 using namespace wheels;
 
 Servo bedMotor;
+Servo kicker;
 
 long lastTime = 0;
 int driveSpeed = SPEED;
@@ -27,11 +28,15 @@ void setup() {
     digitalWrite(LEDG, HIGH);
     digitalWrite(LEDR, HIGH);
   
-    //setup steering servo and point it straight
+    //setup bed servo and point it straight
     bedMotor.attach(9);
-    bedMotor.write(92);
+    //bedMotor.write(90);
 
-    //setup ring arm servo
+    //Setup the kicker
+    kicker.attach(10);
+    kicker.write(90);
+
+   //setup ring arm servo
     //ringServo.attach(RING_DISPENSER_SERVO);
     //ringServo.write(0);
 
@@ -77,6 +82,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  // line sensor pins
+  //write the servo to increment am angle.
+  for(int i = 0; i < 91; i++){
+    bedMotor.write(i);
+    delay(1);
+  }
+  
     
 }
