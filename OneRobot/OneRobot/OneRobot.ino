@@ -6,6 +6,17 @@
 
 using namespace wheels;
 
+Servo firstServe;
+Servo secondServe;
+Servo thridServe;
+Servo fourthServe;
+Servo fifthServe;
+Servo sixthServe;
+Servo seventhServe;
+Servo eightServe;
+Servo ninthServe;
+
+
 void setup() {
   // put your setup code here, to run once:
   for (int i = 0; i < NUM_OF_SENSORS; ++i) {
@@ -79,6 +90,13 @@ void setup() {
   digitalWrite(WHEEL_DIR_BR_F, HIGH);
   digitalWrite(WHEEL_DIR_BR_B, LOW);
 
+
+    //LEDs on shield
+    pinMode(LEDG, OUTPUT);
+    pinMode(LEDR, OUTPUT);
+    digitalWrite(LEDG, HIGH);
+    digitalWrite(LEDR, HIGH);
+  
     //setup steering servo and point it straight
     //steeringMotor.attach(STEERING_PIN);
     //steeringMotor.write(NOSE_CENTER);
@@ -178,8 +196,8 @@ void setup() {
      //delay(100);
 
     //Go forward for 2/10 of a second
-    driveWheels(150, 150);
-    delay(50000);
+    driveWheels(100, 100);
+    delay(100000);
     //STOPIT();
     //lastangle = NOSE_CENTER + 3;
     //setNose(NOSE_CENTER-5);
