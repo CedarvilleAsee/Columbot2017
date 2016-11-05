@@ -18,7 +18,79 @@ Servo ninthServe;
 
 
 void setup() {
+  // put your setup code here, to run once:
+  for (int i = 0; i < NUM_OF_SENSORS; ++i) {
+        pinMode(LINE_SENSOR_PINS[i], INPUT);
+  }
+
+
+  //LEDs on shield
+  pinMode(LEDG, OUTPUT);
+  pinMode(LEDR, OUTPUT);
+  digitalWrite(LEDG, HIGH);
+  digitalWrite(LEDR, HIGH);
+
+// Setup
+
+
+
+
+  // Setup wheel pins.
+  // Setting up a wheel has six steps:
+  //
+  // Set the Power pin mode
+  // Initializing the Power pin to 0
+  //
+  // Set the Forward pin mode
+  // Set the Backward pin mode
+  //
+  // Initializing the Forward pin to HIGH
+  // Initializing the Backward pin to LOW
+
+  // Front left
+  pinMode(WHEEL_PWM_FR, OUTPUT);
+  analogWrite(WHEEL_PWM_FR, 0);
+
+  pinMode(WHEEL_DIR_FL_F, OUTPUT);
+  pinMode(WHEEL_DIR_FL_B, OUTPUT);
+
+  digitalWrite(WHEEL_DIR_FL_F, HIGH);
+  digitalWrite(WHEEL_DIR_FL_B, LOW);
   
+
+  // Front right
+  pinMode(WHEEL_PWM_FL, OUTPUT);
+  analogWrite(WHEEL_PWM_FL, 0);
+
+  pinMode(WHEEL_DIR_FR_F, OUTPUT);
+  pinMode(WHEEL_DIR_FR_B, OUTPUT);
+
+  digitalWrite(WHEEL_DIR_FR_F, HIGH);
+  digitalWrite(WHEEL_DIR_FR_B, LOW);
+
+
+  // Back left
+  pinMode(WHEEL_PWM_BR, OUTPUT);
+  analogWrite(WHEEL_PWM_BR, 0);
+
+  pinMode(WHEEL_DIR_BL_F, OUTPUT);
+  pinMode(WHEEL_DIR_BL_B, OUTPUT);
+
+  digitalWrite(WHEEL_DIR_BL_F, HIGH);
+  digitalWrite(WHEEL_DIR_BL_B, LOW);
+
+
+  // Back right
+  pinMode(WHEEL_PWM_BL, OUTPUT);
+  analogWrite(WHEEL_PWM_BL, 0);
+
+  pinMode(WHEEL_DIR_BR_F, OUTPUT);
+  pinMode(WHEEL_DIR_BR_B, OUTPUT);
+
+  digitalWrite(WHEEL_DIR_BR_F, HIGH);
+  digitalWrite(WHEEL_DIR_BR_B, LOW);
+
+
     //LEDs on shield
     pinMode(LEDG, OUTPUT);
     pinMode(LEDR, OUTPUT);
@@ -41,19 +113,19 @@ void setup() {
     pinMode(PWML, OUTPUT);
     analogWrite(PWMR, 0);
     analogWrite(PWML, 0);
-    
+
     //tell back left motor to drive forward
     pinMode(WHEEL_DIR_BL_F, OUTPUT);
     pinMode(WHEEL_DIR_BL_B, OUTPUT);
     digitalWrite(WHEEL_DIR_BL_F, HIGH);
     digitalWrite(WHEEL_DIR_BL_B, LOW);
-    
+
     //tell back right motor to drive forward
     pinMode(WHEEL_DIR_BR_F, OUTPUT);
     pinMode(WHEEL_DIR_BR_B, OUTPUT);
     digitalWrite(WHEEL_DIR_BR_F, HIGH);
     digitalWrite(WHEEL_DIR_BR_B, LOW);
-    
+
     //enable driving motor controller
     pinMode(WHEEL_PWM_B_STBY, OUTPUT);
     digitalWrite(WHEEL_PWM_B_STBY, HIGH);
@@ -65,7 +137,7 @@ void setup() {
     //pinMode(WHEEL_DIR_BR_F, OUTPUT);
     //digitalWrite(WHEEL_DIR_FR_B, HIGH);
     //digitalWrite(WHEEL_DIR_FR_F, LOW);
-    
+
     //enable ring dispensing motor controller
     //pinMode(WHEEL_PWM_R_STBY, OUTPUT);
     //digitalWrite(WHEEL_PWM_R_STBY, HIGH);
@@ -88,7 +160,7 @@ void setup() {
     prt.println("1");
     #endif
     */
-    
+
     //pinMode(BUTTON1, INPUT_PULLUP);
     //pinMode(BUTTON2, INPUT_PULLUP);
     //while(digitalRead(BUTTON1));
@@ -103,12 +175,12 @@ void setup() {
             } else {
                 digitalWrite(LEDG, LOW);
             }
-            
+
             t = millis();
             toggle = !toggle;
         }
     }*/
-    
+
     /*
     setNose(NOSE_CENTER + 30);//drop nose
     delay(200);
@@ -116,13 +188,13 @@ void setup() {
         ringServo.write(i);
         delay(5);
     }*/
-    
-    
-    
-    
+
+
+
+
     //setNose(NOSE_CENTER - 10);
      //delay(100);
-    
+
     //Go forward for 2/10 of a second
     driveWheels(100, 100);
     delay(100000);
@@ -130,7 +202,7 @@ void setup() {
     //lastangle = NOSE_CENTER + 3;
     //setNose(NOSE_CENTER-5);
     //ringServo.write(0);
-   
+
 
 }
 
@@ -138,5 +210,5 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   // line sensor pins
-    
+
 }
