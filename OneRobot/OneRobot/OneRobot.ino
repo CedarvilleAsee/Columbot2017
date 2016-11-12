@@ -30,67 +30,8 @@ void setup() {
   digitalWrite(LEDG, HIGH);
   digitalWrite(LEDR, HIGH);
 
-// Setup
-
-
-
-
-  // Setup wheel pins.
-  // Setting up a wheel has six steps:
-  //
-  // Set the Power pin mode
-  // Initializing the Power pin to 0
-  //
-  // Set the Forward pin mode
-  // Set the Backward pin mode
-  //
-  // Initializing the Forward pin to HIGH
-  // Initializing the Backward pin to LOW
-
-  // Front left
-  pinMode(WHEEL_PWM_FR, OUTPUT);
-  analogWrite(WHEEL_PWM_FR, 0);
-
-  pinMode(WHEEL_DIR_FL_F, OUTPUT);
-  pinMode(WHEEL_DIR_FL_B, OUTPUT);
-
-  digitalWrite(WHEEL_DIR_FL_F, HIGH);
-  digitalWrite(WHEEL_DIR_FL_B, LOW);
+  wheels::initialize();
   
-
-  // Front right
-  pinMode(WHEEL_PWM_FL, OUTPUT);
-  analogWrite(WHEEL_PWM_FL, 0);
-
-  pinMode(WHEEL_DIR_FR_F, OUTPUT);
-  pinMode(WHEEL_DIR_FR_B, OUTPUT);
-
-  digitalWrite(WHEEL_DIR_FR_F, HIGH);
-  digitalWrite(WHEEL_DIR_FR_B, LOW);
-
-
-  // Back left
-  pinMode(WHEEL_PWM_BR, OUTPUT);
-  analogWrite(WHEEL_PWM_BR, 0);
-
-  pinMode(WHEEL_DIR_BL_F, OUTPUT);
-  pinMode(WHEEL_DIR_BL_B, OUTPUT);
-
-  digitalWrite(WHEEL_DIR_BL_F, HIGH);
-  digitalWrite(WHEEL_DIR_BL_B, LOW);
-
-
-  // Back right
-  pinMode(WHEEL_PWM_BL, OUTPUT);
-  analogWrite(WHEEL_PWM_BL, 0);
-
-  pinMode(WHEEL_DIR_BR_F, OUTPUT);
-  pinMode(WHEEL_DIR_BR_B, OUTPUT);
-
-  digitalWrite(WHEEL_DIR_BR_F, HIGH);
-  digitalWrite(WHEEL_DIR_BR_B, LOW);
-
-
     //LEDs on shield
     pinMode(LEDG, OUTPUT);
     pinMode(LEDR, OUTPUT);
@@ -109,10 +50,12 @@ void setup() {
     //prt.begin(115200);
 
     //setup driving motor speed pins
+    /*
     pinMode(PWMR, OUTPUT);
     pinMode(PWML, OUTPUT);
     analogWrite(PWMR, 0);
     analogWrite(PWML, 0);
+    
 
     //tell back left motor to drive forward
     pinMode(WHEEL_DIR_BL_F, OUTPUT);
@@ -129,18 +72,7 @@ void setup() {
     //enable driving motor controller
     pinMode(WHEEL_PWM_B_STBY, OUTPUT);
     digitalWrite(WHEEL_PWM_B_STBY, HIGH);
-
-
-    //setup ring dispensing motor
-    //pinMode(WHEEL_PWM_FR, OUTPUT);
-    //analogWrite(WHEEL_PWM_FR, 0);
-    //pinMode(WHEEL_DIR_BR_F, OUTPUT);
-    //digitalWrite(WHEEL_DIR_FR_B, HIGH);
-    //digitalWrite(WHEEL_DIR_FR_F, LOW);
-
-    //enable ring dispensing motor controller
-    //pinMode(WHEEL_PWM_R_STBY, OUTPUT);
-    //digitalWrite(WHEEL_PWM_R_STBY, HIGH);
+    */
 
     //misc line sensor pin that does not get init in contructor for some reason
     //pinMode(39, INPUT);
@@ -196,7 +128,7 @@ void setup() {
      //delay(100);
 
     //Go forward for 2/10 of a second
-    driveWheels(100, 100);
+    //driveWheels(100, 100);
     delay(100000);
     //STOPIT();
     //lastangle = NOSE_CENTER + 3;
