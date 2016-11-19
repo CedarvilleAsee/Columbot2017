@@ -49,5 +49,15 @@
 #define WHEEL_PWM_FIRST_STBY  31
 #define WHEEL_PWM_SECOND_STBY  33
 
+//Arm pins 
+#define LEFT_INNER_ARM  1000
+#define RIGHT_INNER_ARM 1001
+#define LEFT_OUTER_ARM  1002
+#define RIGHT_OUTER_ARM 1003 
+#define LEFT_CLAW  1004
+#define RIGHT_CLAW 1005
+
+
+
 
 #endif 

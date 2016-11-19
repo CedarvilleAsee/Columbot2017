@@ -50,29 +50,7 @@ void setup() {
     //prt.begin(115200);
 
     //setup driving motor speed pins
-    /*
-    pinMode(PWMR, OUTPUT);
-    pinMode(PWML, OUTPUT);
-    analogWrite(PWMR, 0);
-    analogWrite(PWML, 0);
     
-
-    //tell back left motor to drive forward
-    pinMode(WHEEL_DIR_BL_F, OUTPUT);
-    pinMode(WHEEL_DIR_BL_B, OUTPUT);
-    digitalWrite(WHEEL_DIR_BL_F, HIGH);
-    digitalWrite(WHEEL_DIR_BL_B, LOW);
-
-    //tell back right motor to drive forward
-    pinMode(WHEEL_DIR_BR_F, OUTPUT);
-    pinMode(WHEEL_DIR_BR_B, OUTPUT);
-    digitalWrite(WHEEL_DIR_BR_F, HIGH);
-    digitalWrite(WHEEL_DIR_BR_B, LOW);
-
-    //enable driving motor controller
-    pinMode(WHEEL_PWM_B_STBY, OUTPUT);
-    digitalWrite(WHEEL_PWM_B_STBY, HIGH);
-    */
 
     //misc line sensor pin that does not get init in contructor for some reason
     //pinMode(39, INPUT);
@@ -97,30 +75,9 @@ void setup() {
     //pinMode(BUTTON2, INPUT_PULLUP);
     //while(digitalRead(BUTTON1));
 
-    /*
-    long t = millis();
-    bool toggle = false;
-    while(analogRead(A8) > 400) { //Wait for light to go out
-        if(millis() - t > 100) {
-            if(toggle) {
-                digitalWrite(LEDG, HIGH);
-            } else {
-                digitalWrite(LEDG, LOW);
-            }
+    //Test code for out put
 
-            t = millis();
-            toggle = !toggle;
-        }
-    }*/
-
-    /*
-    setNose(NOSE_CENTER + 30);//drop nose
-    delay(200);
-    for(int i = 0; i < 100; ++i) {
-        ringServo.write(i);
-        delay(5);
-    }*/
-
+    wheels::powerWheel(FrontRight, Forward, 100);
 
 
 
