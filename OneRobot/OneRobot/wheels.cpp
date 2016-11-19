@@ -1,7 +1,5 @@
 #include "constants.h"
-//#include "nose.h"
 #include "wheels.h"
-//#include "rings.h"
 #include <Arduino.h>
 #include <Servo.h>
 
@@ -91,94 +89,94 @@ void wheels::powerWheel(Wheel wheel, WheelDirection direction,  int speed) {
   // 1 0 | Forward
   // 1 1 | Brake
   switch(wheel) {
-    case Wheel::FrontRight:
-      if (direction == WheelDirection::Forward){
+    case FrontRight:
+      if (direction == Forward){
         digitalWrite(WHEEL_DIR_FR_F, HIGH);
         digitalWrite(WHEEL_DIR_FR_B, LOW);
       }
-      else if (direction == WheelDirection::Backward){
+      else if (direction == Backward){
         digitalWrite(WHEEL_DIR_FR_F, LOW);
         digitalWrite(WHEEL_DIR_FR_B, HIGH);
       }
-      else if (direction == WheelDirection::Coast){
+      else if (direction == Coast){
         digitalWrite(WHEEL_DIR_FR_F, LOW);
         digitalWrite(WHEEL_DIR_FR_B, LOW);
       }
-      else if (direction == WheelDirection::Brake){
+      else if (direction == Brake){
         digitalWrite(WHEEL_DIR_FR_F, HIGH);
         digitalWrite(WHEEL_DIR_FR_B, HIGH);
       }
-      analogWrite(WHEEL_PWM_FR, 0);
+      analogWrite(WHEEL_PWM_FR, speed);
     break;
-    case Wheel::FrontLeft:
-      if (direction == WheelDirection::Forward){
+    case FrontLeft:
+      if (direction == Forward){
         digitalWrite(WHEEL_DIR_FL_F, HIGH);
         digitalWrite(WHEEL_DIR_FL_B, LOW);
       }
-      else if (direction == WheelDirection::Backward){
+      else if (direction == Backward){
         digitalWrite(WHEEL_DIR_FL_F, LOW);
         digitalWrite(WHEEL_DIR_FL_B, HIGH);
       }
-      else if (direction == WheelDirection::Coast){
+      else if (direction == Coast){
         digitalWrite(WHEEL_DIR_FL_F, LOW);
         digitalWrite(WHEEL_DIR_FL_B, LOW);
       }
-      else if (direction == WheelDirection::Brake){
+      else if (direction == Brake){
         digitalWrite(WHEEL_DIR_FL_F, HIGH);
         digitalWrite(WHEEL_DIR_FL_B, HIGH);
       }
-      analogWrite(WHEEL_PWM_FL, 0);
+      analogWrite(WHEEL_PWM_FL, speed);
     break;
-    case Wheel::BackRight:
-      if (direction == WheelDirection::Forward){
+    case BackRight:
+      if (direction == Forward){
         digitalWrite(WHEEL_DIR_BR_F, HIGH);
         digitalWrite(WHEEL_DIR_BR_B, LOW);
       }
-      else if (direction == WheelDirection::Backward){
+      else if (direction == Backward){
         digitalWrite(WHEEL_DIR_BR_F, LOW);
         digitalWrite(WHEEL_DIR_BR_B, HIGH);
       }
-      else if (direction == WheelDirection::Coast){
+      else if (direction == Coast){
         digitalWrite(WHEEL_DIR_BR_F, LOW);
         digitalWrite(WHEEL_DIR_BR_B, LOW);
       }
-      else if (direction == WheelDirection::Brake){
+      else if (direction == Brake){
         digitalWrite(WHEEL_DIR_BR_F, HIGH);
         digitalWrite(WHEEL_DIR_BR_B, HIGH);
       }
-      analogWrite(WHEEL_PWM_BR, 0);
+      analogWrite(WHEEL_PWM_BR, speed);
     break;
-    case Wheel::BackLeft:
-      if (direction == WheelDirection::Forward){
+    case BackLeft:
+      if (direction == Forward){
         digitalWrite(WHEEL_DIR_BL_F, HIGH);
         digitalWrite(WHEEL_DIR_BL_B, LOW);
       }
-      else if (direction == WheelDirection::Backward){
+      else if (direction == Backward){
         digitalWrite(WHEEL_DIR_BL_F, LOW);
         digitalWrite(WHEEL_DIR_BL_B, HIGH);
       }
-      else if (direction == WheelDirection::Coast){
+      else if (direction == Coast){
         digitalWrite(WHEEL_DIR_BL_F, LOW);
         digitalWrite(WHEEL_DIR_BL_B, LOW);
       }
-      else if (direction == WheelDirection::Brake){
+      else if (direction == Brake){
         digitalWrite(WHEEL_DIR_BL_F, HIGH);
         digitalWrite(WHEEL_DIR_BL_B, HIGH);
       }
-      analogWrite(WHEEL_PWM_BL, 0);
+      analogWrite(WHEEL_PWM_BL, speed);
     break;
   }
 }
 
 void wheels::powerAllWheels(WheelDirection direction, int speed) {
-  powerWheel(Wheel::FrontRight, direction, speed);
-  powerWheel(Wheel::FrontLeft, direction, speed);
-  powerWheel(Wheel::BackRight, direction, speed);
-  powerWheel(Wheel::BackLeft, direction, speed);
+  powerWheel(FrontRight, direction, speed);
+  powerWheel(FrontLeft, direction, speed);
+  powerWheel(BackRight, direction, speed);
+  powerWheel(BackLeft, direction, speed);
 }
 
 void wheels::stopAllWheels() {
-  powerAllWheels(WheelDirection::Brake, 0);
+  powerAllWheels(Brake, 0);
 }
 
 // drives wheels with differential based on angle
