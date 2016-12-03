@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-void arms::initialize() {
+void arms::initialize(Arm leftArm, Arm rightArm) {
   //sets up all arm servors
   leftArm.inner.attach(LEFT_INNER_ARM);
   leftArm.outer.attach(LEFT_OUTER_ARM);
