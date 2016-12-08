@@ -5,7 +5,7 @@
 #define DRIVE_WHEEL_L     34
 #define DRIVE_WHEEL_R     36 
 
-#define LEDR              38
+#define LEDY              38
 #define LEDG              40
    
 #define WHEEL_DIR_FL_B     35
@@ -50,12 +50,12 @@
 #define WHEEL_PWM_SECOND_STBY  33
 
 //Arm pins 
-#define LEFT_INNER_ARM  1000
-#define RIGHT_INNER_ARM 1001
-#define LEFT_OUTER_ARM  1002
-#define RIGHT_OUTER_ARM 1003 
-#define LEFT_CLAW  1004
-#define RIGHT_CLAW 1005
+#define LEFT_INNER_ARM  6
+#define RIGHT_INNER_ARM 11
+#define LEFT_OUTER_ARM  9
+#define RIGHT_OUTER_ARM 12 
+#define LEFT_CLAW  10
+#define RIGHT_CLAW 13
 
 
 

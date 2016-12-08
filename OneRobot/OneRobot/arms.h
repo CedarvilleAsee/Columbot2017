@@ -20,10 +20,9 @@ namespace arms {
     Servo claw;
    };
 
-   Arm leftArm;
-   Arm rightArm;
+   
   //initailize sets up the servos
-   void initialize();
+   void initialize(Arm leftArm, Arm rightArm);
   //setArmState sets the servos to the appropriate angles
    void setArmState(Arm arm, ArmState armState);
 

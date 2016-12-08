@@ -3,6 +3,7 @@
 #include "pinNumbers.h"
 #include "constants.h"
 #include "wheels.h"
+#include "arms.h"
 
 using namespace wheels;
 
@@ -15,9 +16,12 @@ Servo sixthServe;
 Servo seventhServe;
 Servo eightServe;
 Servo ninthServe;
+  Servo serve;
+  arms::Arm rightArm;
+  arms::Arm leftArm;
 
-
-void setup() {
+void setup(){
+ 
   // put your setup code here, to run once:
   for (int i = 0; i < NUM_OF_SENSORS; ++i) {
         pinMode(LINE_SENSOR_PINS[i], INPUT);
@@ -26,78 +30,54 @@ void setup() {
 
   //LEDs on shield
   pinMode(LEDG, OUTPUT);
-  pinMode(LEDR, OUTPUT);
+  pinMode(LEDY, OUTPUT);
   digitalWrite(LEDG, HIGH);
-  digitalWrite(LEDR, HIGH);
+  digitalWrite(LEDY, HIGH);
 
   wheels::initialize();
   
-    //LEDs on shield
-    pinMode(LEDG, OUTPUT);
-    pinMode(LEDR, OUTPUT);
-    digitalWrite(LEDG, HIGH);
-    digitalWrite(LEDR, HIGH);
-  
-    //setup steering servo and point it straight
-    //steeringMotor.attach(STEERING_PIN);
-    //steeringMotor.write(NOSE_CENTER);
+  //start serial communication
+  //prt.begin(115200);
 
-    //setup ring arm servo
-    //ringServo.attach(RING_DISPENSER_SERVO);
-    //ringServo.write(0);
-
-    //start serial communication
-    //prt.begin(115200);
-
-    //setup driving motor speed pins
-    
-
-    //misc line sensor pin that does not get init in contructor for some reason
-    //pinMode(39, INPUT);
-    pinMode(11, INPUT);
-    pinMode(53, INPUT);
-
-    /*
-    //setup wall sensors
-    pinMode(WALL_SENSOR_R, INPUT);
-    pinMode(WALL_SENSOR_RS, INPUT);
-    pinMode(GARAGE_SENSOR, INPUT);
-    */
-
-    /*
-    //can be used for version number to make sure new code is uploaded
-    #ifdef DEBUG
-    prt.println("1");
-    #endif
-    */
-
-    //pinMode(BUTTON1, INPUT_PULLUP);
-    //pinMode(BUTTON2, INPUT_PULLUP);
-    //while(digitalRead(BUTTON1));
-
-    //Test code for out put
-
-    wheels::powerWheel(FrontRight, Forward, 100);
-
-
-
-    //setNose(NOSE_CENTER - 10);
-     //delay(100);
-
-    //Go forward for 2/10 of a second
-    //driveWheels(100, 100);
-    delay(100000);
-    //STOPIT();
-    //lastangle = NOSE_CENTER + 3;
-    //setNose(NOSE_CENTER-5);
-    //ringServo.write(0);
-
-
+  pinMode(BUTTON1, INPUT);
+  pinMode(BUTTON2, INPUT);
+  //serve.attach(RIGHT_CLAW);  
+  arms::initialize(leftArm, rightArm);
+//  leftArm.inner.attach(LEFT_INNER_ARM);
+//  leftArm.outer.attach(LEFT_OUTER_ARM);
+//  leftArm.claw.attach(LEFT_CLAW);
+//  rightArm.inner.attach(RIGHT_INNER_ARM);
+//  rightArm.outer.attach(RIGHT_OUTER_ARM);
+//  rightArm.claw.attach(RIGHT_CLAW);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
-  // line sensor pins
+  /*while(digitalRead(BUTTON1));
+  wheels::powerAllWheels(Forward, 100);
+  for(int i=1; i<=10; i++){
+    digitalWrite(LEDG, LOW);
+    delay(500);
+    digitalWrite(LEDG, HIGH);
+    delay(500);
+  }
+  wheels::stopAllWheels();
+  */
+  arms::ArmState armOpen;
+  armOpen.claw = 110;
+  armOpen.inner = 70;
+  armOpen.outer = 70;
+  arms::ArmState armClosed;
+  armClosed.claw = 78;
+  armClosed.inner = 140;
+  armClosed.outer = 140;
+  digitalWrite(LEDG,LOW);
+  while(digitalRead(BUTTON2));
+  digitalWrite(LEDG,HIGH);
+  //rightArm.claw.write(110);
+  arms::setArmState(rightArm, armOpen);
+  while(digitalRead(BUTTON1)); 
+  digitalWrite(LEDG,LOW); 
+//  rightArm.claw.write(78);
+  arms::setArmState(rightArm, armClosed);
 
 }
