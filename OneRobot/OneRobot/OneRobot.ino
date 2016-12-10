@@ -16,9 +16,9 @@ Servo sixthServe;
 Servo seventhServe;
 Servo eightServe;
 Servo ninthServe;
-  Servo serve;
-  arms::Arm rightArm;
-  arms::Arm leftArm;
+Servo serve;
+arms::Arm rightArm;
+arms::Arm leftArm;
 
 void setup(){
  
@@ -39,7 +39,7 @@ void setup(){
   //start serial communication
   //prt.begin(115200);
 
-  pinMode(BUTTON1, INPUT);
+  pinMode(BUTTON1, INPUT_PULLUP);
   pinMode(BUTTON2, INPUT);
   //serve.attach(RIGHT_CLAW);  
   arms::initialize(leftArm, rightArm);
@@ -51,33 +51,61 @@ void setup(){
 //  rightArm.claw.attach(RIGHT_CLAW);
 }
 
-void loop() {
-  /*while(digitalRead(BUTTON1));
-  wheels::powerAllWheels(Forward, 100);
-  for(int i=1; i<=10; i++){
-    digitalWrite(LEDG, LOW);
-    delay(500);
-    digitalWrite(LEDG, HIGH);
-    delay(500);
-  }
-  wheels::stopAllWheels();
-  */
-  arms::ArmState armOpen;
-  armOpen.claw = 110;
-  armOpen.inner = 70;
-  armOpen.outer = 70;
-  arms::ArmState armClosed;
-  armClosed.claw = 78;
-  armClosed.inner = 140;
-  armClosed.outer = 140;
-  digitalWrite(LEDG,LOW);
-  while(digitalRead(BUTTON2));
-  digitalWrite(LEDG,HIGH);
-  //rightArm.claw.write(110);
-  arms::setArmState(rightArm, armOpen);
-  while(digitalRead(BUTTON1)); 
-  digitalWrite(LEDG,LOW); 
-//  rightArm.claw.write(78);
-  arms::setArmState(rightArm, armClosed);
+int lastButton1 = 0;
+bool isArmOpen = true;
 
+int lastButton2 = 0;
+bool isClawOpen = true;
+
+void loop() {
+
+  // A bunch of armstates
+  arms::ArmState armOpen;
+  armOpen.claw = 95;
+  armOpen.inner = 50;
+  armOpen.outer = 50;
+  arms::ArmState clawClose;
+  clawClose.claw = 73;
+  clawClose.inner = 50;
+  clawClose.outer = 50;
+  arms::ArmState clawOpen;
+  clawOpen.claw = 95;
+  clawOpen.inner = 50;
+  clawOpen.outer = 50;  
+  arms::ArmState armClosed;
+  armClosed.claw = 73;
+  armClosed.inner = 150;
+  armClosed.outer = 150;
+
+  // Toggle between all the armstates
+  
+  int button1 = digitalRead(BUTTON1);
+  int button2 = digitalRead(BUTTON2);
+
+  if (button1 != lastButton1) {
+    lastButton1 = button1;
+    if (button1 == LOW) {
+      if (isArmOpen) {
+        isArmOpen = false;
+        setArmState(rightArm, armOpen);
+      }
+      else {
+        isArmOpen = true;
+        setArmState(rightArm, armClosed);
+      }
+    }
+  }
+  if (button2 != lastButton2) {
+    lastButton2 = button2;
+    if (button2 == LOW) {
+      if (isClawOpen) {
+        isClawOpen = false;
+        setArmState(rightArm, clawClose);
+      }
+      else {
+        isClawOpen = true;
+        setArmState(rightArm, clawOpen);        
+      }
+    }
+  }
 }
