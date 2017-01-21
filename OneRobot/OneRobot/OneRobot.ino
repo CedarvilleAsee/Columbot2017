@@ -35,20 +35,25 @@ void setup(){
   digitalWrite(LEDY, HIGH);
 
   wheels::initialize();
+  arms::initialize(leftArm, rightArm);
+  pinMode(BUTTON1, INPUT_PULLUP);
+  pinMode(BUTTON2, INPUT);
   
   //start serial communication
   //prt.begin(115200);
 
-  pinMode(BUTTON1, INPUT_PULLUP);
-  pinMode(BUTTON2, INPUT);
+
   //serve.attach(RIGHT_CLAW);  
-  arms::initialize(leftArm, rightArm);
+
 //  leftArm.inner.attach(LEFT_INNER_ARM);
 //  leftArm.outer.attach(LEFT_OUTER_ARM);
 //  leftArm.claw.attach(LEFT_CLAW);
 //  rightArm.inner.attach(RIGHT_INNER_ARM);
 //  rightArm.outer.attach(RIGHT_OUTER_ARM);
 //  rightArm.claw.attach(RIGHT_CLAW);
+
+
+
 }
 
 int lastButton1 = 0;
@@ -58,54 +63,64 @@ int lastButton2 = 0;
 bool isClawOpen = true;
 
 void loop() {
+  
+  // declaring armstates for the main to use
+  arms::ArmState straightArm;//arm is open and claw is open
+  straightArm.claw = 95;
+  straightArm.inner = 90;
+  straightArm.outer = 10;
+  arms::ArmState closed;//arm is open and claw is closed
+  closed.claw = 73;
+  closed.inner = 180;
+  closed.outer = 120;
+  arms::ArmState preDrop;//arm is closed and claw is closed
+  preDrop.claw = 73;
+  preDrop.inner = 150;
+  preDrop.outer = 150;
+  arms::ArmState barrelDrop;//arm is closed and claw is open
+  barrelDrop.claw = 95;
+  barrelDrop.inner = 150;
+  barrelDrop.outer = 150;  
 
-  // A bunch of armstates
-  arms::ArmState armOpen;
-  armOpen.claw = 95;
-  armOpen.inner = 50;
-  armOpen.outer = 50;
-  arms::ArmState clawClose;
-  clawClose.claw = 73;
-  clawClose.inner = 50;
-  clawClose.outer = 50;
-  arms::ArmState clawOpen;
-  clawOpen.claw = 95;
-  clawOpen.inner = 50;
-  clawOpen.outer = 50;  
-  arms::ArmState armClosed;
-  armClosed.claw = 73;
-  armClosed.inner = 150;
-  armClosed.outer = 150;
+
+
+//State Machine Begginings
+  //update Sensors
+  //update Arms
+  //update wheels
+
+  setArmState(rightArm,closed);
+
 
   // Toggle between all the armstates
   
-  int button1 = digitalRead(BUTTON1);
-  int button2 = digitalRead(BUTTON2);
-
-  if (button1 != lastButton1) {
-    lastButton1 = button1;
-    if (button1 == LOW) {
-      if (isArmOpen) {
-        isArmOpen = false;
-        setArmState(rightArm, armOpen);
-      }
-      else {
-        isArmOpen = true;
-        setArmState(rightArm, armClosed);
-      }
-    }
-  }
-  if (button2 != lastButton2) {
-    lastButton2 = button2;
-    if (button2 == LOW) {
-      if (isClawOpen) {
-        isClawOpen = false;
-        setArmState(rightArm, clawClose);
-      }
-      else {
-        isClawOpen = true;
-        setArmState(rightArm, clawOpen);        
-      }
-    }
-  }
+//  int button1 = digitalRead(BUTTON1);
+//  int button2 = digitalRead(BUTTON2);
+//
+//  if (button1 != lastButton1) {
+//    lastButton1 = button1;
+//    if (button1 == LOW) {
+//      if (isArmOpen) {
+//        isArmOpen = false;
+//        setArmState(rightArm, readyToCatch);
+//      }
+//      else {
+//        isArmOpen = true;
+//        setArmState(rightArm, preDrop);
+//      }
+//    }
+//  }
+//  if (button2 != lastButton2) {
+//    lastButton2 = button2;
+//    if (button2 == LOW) {
+//      if (isClawOpen) {
+//        isClawOpen = false;
+//        setArmState(rightArm, barrelCatch);
+//      }
+//      else {
+//        isClawOpen = true;
+//        setArmState(rightArm, barrelDrop);        
+//      }
+//    }
+//  }
 }
