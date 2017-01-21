@@ -65,18 +65,18 @@ bool isClawOpen = true;
 void loop() {
   
   // declaring armstates for the main to use
-  arms::ArmState readyToCatch;//arm is open and claw is open
-  readyToCatch.claw = 95;
-  readyToCatch.inner = 50;
-  readyToCatch.outer = 50;
-  arms::ArmState barrelCatch;//arm is open and claw is closed
-  barrelCatch.claw = 73;
-  barrelCatch.inner = 50;
-  barrelCatch.outer = 50;
-  arms::ArmState predrop;//arm is closed and claw is closed
-  predrop.claw = 73;
-  predrop.inner = 150;
-  predrop.outer = 150;
+  arms::ArmState straightArm;//arm is open and claw is open
+  straightArm.claw = 95;
+  straightArm.inner = 90;
+  straightArm.outer = 10;
+  arms::ArmState closed;//arm is open and claw is closed
+  closed.claw = 73;
+  closed.inner = 180;
+  closed.outer = 120;
+  arms::ArmState preDrop;//arm is closed and claw is closed
+  preDrop.claw = 73;
+  preDrop.inner = 150;
+  preDrop.outer = 150;
   arms::ArmState barrelDrop;//arm is closed and claw is open
   barrelDrop.claw = 95;
   barrelDrop.inner = 150;
@@ -89,11 +89,11 @@ void loop() {
   //update Arms
   //update wheels
 
+  setArmState(rightArm,closed);
 
 
-
-//  // Toggle between all the armstates
-//  
+  // Toggle between all the armstates
+  
 //  int button1 = digitalRead(BUTTON1);
 //  int button2 = digitalRead(BUTTON2);
 //
@@ -102,11 +102,11 @@ void loop() {
 //    if (button1 == LOW) {
 //      if (isArmOpen) {
 //        isArmOpen = false;
-//        setArmState(rightArm, armOpen);
+//        setArmState(rightArm, readyToCatch);
 //      }
 //      else {
 //        isArmOpen = true;
-//        setArmState(rightArm, armClosed);
+//        setArmState(rightArm, preDrop);
 //      }
 //    }
 //  }
@@ -115,11 +115,11 @@ void loop() {
 //    if (button2 == LOW) {
 //      if (isClawOpen) {
 //        isClawOpen = false;
-//        setArmState(rightArm, clawClose);
+//        setArmState(rightArm, barrelCatch);
 //      }
 //      else {
 //        isClawOpen = true;
-//        setArmState(rightArm, clawOpen);        
+//        setArmState(rightArm, barrelDrop);        
 //      }
 //    }
 //  }
