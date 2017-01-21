@@ -65,22 +65,22 @@ bool isClawOpen = true;
 void loop() {
   
   // declaring armstates for the main to use
-  arms::ArmState armOpen;//arm is open and claw is open
-  armOpen.claw = 95;
-  armOpen.inner = 50;
-  armOpen.outer = 50;
-  arms::ArmState clawClose;//arm is open and claw is closed
-  clawClose.claw = 73;
-  clawClose.inner = 50;
-  clawClose.outer = 50;
-  arms::ArmState armClosed;//arm is closed and claw is closed
-  armClosed.claw = 73;
-  armClosed.inner = 150;
-  armClosed.outer = 150;
-  arms::ArmState clawOpen;//arm is closed and claw is open
-  clawOpen.claw = 95;
-  clawOpen.inner = 150;
-  clawOpen.outer = 150;  
+  arms::ArmState readyToCatch;//arm is open and claw is open
+  readyToCatch.claw = 95;
+  readyToCatch.inner = 50;
+  readyToCatch.outer = 50;
+  arms::ArmState barrelCatch;//arm is open and claw is closed
+  barrelCatch.claw = 73;
+  barrelCatch.inner = 50;
+  barrelCatch.outer = 50;
+  arms::ArmState predrop;//arm is closed and claw is closed
+  predrop.claw = 73;
+  predrop.inner = 150;
+  predrop.outer = 150;
+  arms::ArmState barrelDrop;//arm is closed and claw is open
+  barrelDrop.claw = 95;
+  barrelDrop.inner = 150;
+  barrelDrop.outer = 150;  
 
 
 
