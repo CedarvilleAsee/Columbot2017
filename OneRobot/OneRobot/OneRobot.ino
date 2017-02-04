@@ -62,14 +62,11 @@ void setup(){
 int lastButton1 = 0;
 int lastButton2 = 0;
 int command=0;
-int command1=0;
-int command2=0;
-int command3=0;
-int armStatus=0;
+int armStatus=10;
 
 void loop() {
   
-  // declaring armstates for the main to use
+  // declaring armStatuss for the main to use
   arms::ArmState straightArm;//arm is open and claw is closed
   straightArm.claw = CLAW_CLOSED;
   straightArm.inner = 90;
@@ -91,56 +88,45 @@ void loop() {
 
   if (Serial.available() > 0 ){
     command = Serial.read();
-    command1 = Serial.read();
-    command2 = Serial.read();
-    command3 = Serial.read();
     Serial.print("I recieved: ");
     Serial.println(command);
-  }
-  switch (command) {
+  switch (command){
     case ARM:
-      if (command1 == CLOSED) {
-        if (command2 == CLAW){
-          if (command3 == OPEN){
-            setArmState(rightArm, closed);
-            armStatus = ARMSTATE_CLOSED;
-          }
-          else if (command3 == OPEN){
-            setArmState(rightArm, preped);
-            armStatus = ARMSTATE_PREPED;
-          }
-        }
-      }
-      else if (command1 == OPEN){
-        if (command2 == CLAW){
-          if (command3 == OPEN){
-            setArmState(rightArm, straightArm);
-            armStatus= ARMSTATE_STRAIGHTARM;
-          }
-          else if (command3 == OPEN){
-            setArmState(rightArm, barrelDrop);
-            armStatus = ARMSTATE_BARRELDROP;
-          }
-        }
-      }
-      break;
-    case CLAW:
-      if (command1 == OPEN && armStatus == ARMSTATE_STRAIGHTARM){
-        setArmState(rightArm, barrelDrop);
+      if(armStatus==ARMSTATE_CLOSED){
+        setArmState(rightArm,barrelDrop);
         armStatus = ARMSTATE_BARRELDROP;
       }
-      else if (command1 == OPEN && armStatus == ARMSTATE_PREPED){
-        setArmState(rightArm, closed);
+      else if(armStatus==ARMSTATE_PREPED){
+        setArmState(rightArm,straightArm);
+        armStatus = ARMSTATE_STRAIGHTARM;
+      }
+      else if(armStatus==ARMSTATE_BARRELDROP){
+        setArmState(rightArm,closed);
         armStatus = ARMSTATE_CLOSED;
       }
-      else if (command1 == CLOSED && armStatus == ARMSTATE_CLOSED){
+      else if(armStatus==ARMSTATE_STRAIGHTARM){
         setArmState(rightArm, preped);
         armStatus = ARMSTATE_PREPED;
       }
-      else if (command1 == CLOSED && armStatus == ARMSTATE_PREPED){
-        setArmState(rightArm, closed);
+      break;
+    case CLAW:
+      if(armStatus==ARMSTATE_CLOSED){
+        setArmState(rightArm,preped);
+        armStatus = ARMSTATE_PREPED;
+      }
+      else if(armStatus==ARMSTATE_PREPED){
+        setArmState(rightArm,closed);
         armStatus = ARMSTATE_CLOSED;
-      } 
+      }
+      else if(armStatus==ARMSTATE_BARRELDROP){
+        setArmState(rightArm,straightArm);
+        armStatus = ARMSTATE_STRAIGHTARM;
+      }
+      else if(armStatus==ARMSTATE_STRAIGHTARM){
+        setArmState(rightArm, barrelDrop);
+        armStatus = ARMSTATE_BARRELDROP;
+      }
+  }
 
   }
 
@@ -152,7 +138,7 @@ void loop() {
 //  setArmState(rightArm,closed);
 
 
-  // Toggle between all the armstates
+  // Toggle between all the armStatuss
   
 //  int button1 = digitalRead(BUTTON1);
 //  if (button1 > 0){
