@@ -11,7 +11,6 @@ void arms::initialize(Arm leftArm, Arm rightArm) {
   rightArm.inner.attach(RIGHT_INNER_ARM);
   rightArm.outer.attach(RIGHT_OUTER_ARM);
   rightArm.claw.attach(RIGHT_CLAW);
-  
 }
 void arms::setArmState(Arm arm, ArmState armState){
   //sets servos pos
