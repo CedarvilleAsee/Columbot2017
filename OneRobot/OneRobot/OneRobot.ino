@@ -1,3 +1,4 @@
+//Updated 1-28-17
 #include <Servo.h>
 //#include <lineFollow.h>
 #include "pinNumbers.h"
@@ -38,6 +39,8 @@ void setup(){
   arms::initialize(leftArm, rightArm);
   pinMode(BUTTON1, INPUT_PULLUP);
   pinMode(BUTTON2, INPUT);
+  Serial.begin(115200);
+  Serial.write("Hello from Robot1!");
   
   //start serial communication
   //prt.begin(115200);
@@ -57,46 +60,131 @@ void setup(){
 }
 
 int lastButton1 = 0;
-bool isArmOpen = true;
-
 int lastButton2 = 0;
-bool isClawOpen = true;
+int command=0;
+int command1=0;
+int command2=0;
+int command3=0;
+int armStatus=0;
 
 void loop() {
   
   // declaring armstates for the main to use
-  arms::ArmState straightArm;//arm is open and claw is open
-  straightArm.claw = 95;
+  arms::ArmState straightArm;//arm is open and claw is closed
+  straightArm.claw = CLAW_CLOSED;
   straightArm.inner = 90;
   straightArm.outer = 10;
-  arms::ArmState closed;//arm is open and claw is closed
-  closed.claw = 73;
+  arms::ArmState closed;//arm is closed and claw is open
+  closed.claw = CLAW_OPEN;
   closed.inner = 180;
   closed.outer = 120;
-  arms::ArmState preDrop;//arm is closed and claw is closed
-  preDrop.claw = 73;
-  preDrop.inner = 150;
-  preDrop.outer = 150;
+  arms::ArmState preped;//arm is closed and claw is closed
+  preped.claw = CLAW_CLOSED;
+  preped.inner = 180;
+  preped.outer = 120;
   arms::ArmState barrelDrop;//arm is closed and claw is open
-  barrelDrop.claw = 95;
-  barrelDrop.inner = 150;
-  barrelDrop.outer = 150;  
+  barrelDrop.claw = CLAW_OPEN;
+  barrelDrop.inner = 90;
+  barrelDrop.outer = 10;  
 
 
+
+  if (Serial.available() > 0 ){
+    command = Serial.read();
+    command1 = Serial.read();
+    command2 = Serial.read();
+    command3 = Serial.read();
+    Serial.print("I recieved: ");
+    Serial.println(command);
+  }
+  switch (command) {
+    case ARM:
+      if (command1 == CLOSED) {
+        if (command2 == CLAW){
+          if (command3 == OPEN){
+            setArmState(rightArm, closed);
+            armStatus = ARMSTATE_CLOSED;
+          }
+          else if (command3 == OPEN){
+            setArmState(rightArm, preped);
+            armStatus = ARMSTATE_PREPED;
+          }
+        }
+      }
+      else if (command1 == OPEN){
+        if (command2 == CLAW){
+          if (command3 == OPEN){
+            setArmState(rightArm, straightArm);
+            armStatus= ARMSTATE_STRAIGHTARM;
+          }
+          else if (command3 == OPEN){
+            setArmState(rightArm, barrelDrop);
+            armStatus = ARMSTATE_BARRELDROP;
+          }
+        }
+      }
+      break;
+    case CLAW:
+      if (command1 == OPEN && armStatus == ARMSTATE_STRAIGHTARM){
+        setArmState(rightArm, barrelDrop);
+        armStatus = ARMSTATE_BARRELDROP;
+      }
+      else if (command1 == OPEN && armStatus == ARMSTATE_PREPED){
+        setArmState(rightArm, closed);
+        armStatus = ARMSTATE_CLOSED;
+      }
+      else if (command1 == CLOSED && armStatus == ARMSTATE_CLOSED){
+        setArmState(rightArm, preped);
+        armStatus = ARMSTATE_PREPED;
+      }
+      else if (command1 == CLOSED && armStatus == ARMSTATE_PREPED){
+        setArmState(rightArm, closed);
+        armStatus = ARMSTATE_CLOSED;
+      } 
+
+  }
 
 //State Machine Begginings
   //update Sensors
   //update Arms
   //update wheels
 
-  setArmState(rightArm,closed);
+//  setArmState(rightArm,closed);
 
 
   // Toggle between all the armstates
   
 //  int button1 = digitalRead(BUTTON1);
+//  if (button1 > 0){
+//    lastButton1 = button1;
+//    lastButton2 = 0;
+//  }
 //  int button2 = digitalRead(BUTTON2);
+//  if (button2>0){
+//    lastButton2 = button2;
+//    lastButton1 = 0;
+//  }
 //
+//  if (lastButton1 > 0 && armStatus < 20 ) {
+//    setArmState(rightArm, straightArm);
+//    armStatus = ARMSTATE_STRAIGHTARM;
+//  }
+//  else if (lastButton1>0 && armStatus == ARMSTATE_STRAIGHTARM){
+//    setArmState(rightArm, barrelDrop);
+//    armStatus = ARMSTATE_BARRELDROP;
+//  }
+//  else if (lastButton2>0 && armStatus >=20){
+//    setArmState(rightArm, closed);
+//    armStatus = ARMSTATE_CLOSED;//represents a closed state with open claw
+//  }
+//  else if (lastButton2>0 && armStatus == ARMSTATE_CLOSED){
+//    setArmState(rightArm, preped);
+//    armStatus = ARMSTATE_PREPED;
+//  }
+
+
+
+
 //  if (button1 != lastButton1) {
 //    lastButton1 = button1;
 //    if (button1 == LOW) {
