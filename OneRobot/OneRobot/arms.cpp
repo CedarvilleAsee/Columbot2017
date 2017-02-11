@@ -18,3 +18,42 @@ void arms::setArmState(Arm arm, ArmState armState){
   arm.outer.write(armState.outer);
   arm.claw.write(armState.claw);        
 }
+void arms::changeArmPos(ArmState &current, ArmState ending, Arm arm, int t, int currentTime, int startTime, bool &op) {
+    double timeConstant = (currentTime-startTime)/(double)t;
+    arms::ArmState delta;
+    delta.inner = ending.inner - current.inner;
+    delta.outer = ending.outer - current.outer;
+    delta.claw = ending.claw - current.claw;
+    arms::ArmState newAngle;
+    Serial.println("Running changeArmPos");
+    if(delta.inner<5 && delta.inner>-5){
+      arms::setEqual(newAngle,ending);
+      op = false;
+    }
+    else{
+      newAngle.inner = (int)(timeConstant*delta.inner+current.inner);
+      newAngle.outer = (int)(timeConstant*delta.outer+current.outer);
+      newAngle.claw = (int)(timeConstant*delta.claw+current.claw);
+    }
+    arms::setArmState(arm,newAngle);
+    arms::setEqual(current,newAngle);
+    
+}
+bool arms::isEqual(ArmState arm1, ArmState arm2){
+    bool armStateEqual = true;
+    if (arm1.inner != arm2.inner){
+      armStateEqual = false;
+    }
+    if (arm1.outer != arm2.outer){
+      armStateEqual = false;
+    }
+    if (arm1.claw != arm2.claw){
+      armStateEqual = false;
+    }
+    return armStateEqual;
+}
+void arms::setEqual(ArmState &arm1, ArmState arm2){
+  arm1.inner = arm2.inner;
+  arm1.outer = arm2.outer;
+  arm1.claw  = arm2.claw;
+}

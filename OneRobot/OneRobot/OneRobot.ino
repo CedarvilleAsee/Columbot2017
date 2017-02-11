@@ -18,8 +18,17 @@ Servo seventhServe;
 Servo eightServe;
 Servo ninthServe;
 Servo serve;
+
+arms::ArmState rightArmCurrent;
+arms::ArmState rightArmUpdate;
 arms::Arm rightArm;
 arms::Arm leftArm;
+arms::ArmState leftArmCurrent;
+arms::ArmState leftArmUpdate;
+double startTime = 0;
+bool operating = false;
+int command=0;
+int armStatus=10;
 
 void setup(){
  
@@ -41,32 +50,25 @@ void setup(){
   pinMode(BUTTON2, INPUT);
   Serial.begin(115200);
   Serial.write("Hello from Robot1!");
-  
-  //start serial communication
-  //prt.begin(115200);
 
 
-  //serve.attach(RIGHT_CLAW);  
-
-//  leftArm.inner.attach(LEFT_INNER_ARM);
-//  leftArm.outer.attach(LEFT_OUTER_ARM);
-//  leftArm.claw.attach(LEFT_CLAW);
-//  rightArm.inner.attach(RIGHT_INNER_ARM);
-//  rightArm.outer.attach(RIGHT_OUTER_ARM);
-//  rightArm.claw.attach(RIGHT_CLAW);
+  arms::ArmState init;
+  init.inner = 180;
+  init.outer = 120;
+  init.claw = CLAW_OPEN;
+  arms::setArmState(rightArm,init);
+  arms::setEqual(rightArmUpdate,init); 
+  arms::setEqual(rightArmCurrent,init);
 
 
 
 }
 
-int lastButton1 = 0;
-int lastButton2 = 0;
-int command=0;
-int armStatus=10;
+
 
 void loop() {
   
-  // declaring armStatuss for the main to use
+  // declaring armStates for the main to use
   arms::ArmState straightArm;//arm is open and claw is closed
   straightArm.claw = CLAW_CLOSED;
   straightArm.inner = 90;
@@ -82,52 +84,38 @@ void loop() {
   arms::ArmState barrelDrop;//arm is closed and claw is open
   barrelDrop.claw = CLAW_OPEN;
   barrelDrop.inner = 90;
-  barrelDrop.outer = 10;  
+  barrelDrop.outer = 10;
+  
 
+  double currentTime = (double)(millis());
 
+  if (!isEqual(rightArmCurrent,rightArmUpdate)&& operating==false){
+    startTime = (double)(millis());
+    operating = true;
+  }
+  if (operating == true){
+    arms::changeArmPos(rightArmCurrent, rightArmUpdate, rightArm, 500, currentTime, startTime, operating);
+  }
 
-  if (Serial.available() > 0 ){
+  if (Serial.available() > 0 && operating == false){
     command = Serial.read();
     Serial.print("I recieved: ");
     Serial.println(command);
-  switch (command){
-    case ARM:
-      if(armStatus==ARMSTATE_CLOSED){
-        setArmState(rightArm,barrelDrop);
-        armStatus = ARMSTATE_BARRELDROP;
-      }
-      else if(armStatus==ARMSTATE_PREPED){
-        setArmState(rightArm,straightArm);
-        armStatus = ARMSTATE_STRAIGHTARM;
-      }
-      else if(armStatus==ARMSTATE_BARRELDROP){
-        setArmState(rightArm,closed);
-        armStatus = ARMSTATE_CLOSED;
-      }
-      else if(armStatus==ARMSTATE_STRAIGHTARM){
-        setArmState(rightArm, preped);
-        armStatus = ARMSTATE_PREPED;
-      }
-      break;
-    case CLAW:
-      if(armStatus==ARMSTATE_CLOSED){
-        setArmState(rightArm,preped);
-        armStatus = ARMSTATE_PREPED;
-      }
-      else if(armStatus==ARMSTATE_PREPED){
-        setArmState(rightArm,closed);
-        armStatus = ARMSTATE_CLOSED;
-      }
-      else if(armStatus==ARMSTATE_BARRELDROP){
-        setArmState(rightArm,straightArm);
-        armStatus = ARMSTATE_STRAIGHTARM;
-      }
-      else if(armStatus==ARMSTATE_STRAIGHTARM){
-        setArmState(rightArm, barrelDrop);
-        armStatus = ARMSTATE_BARRELDROP;
-      }
-  }
-
+    switch (command){
+      case 49:
+        arms::setEqual(rightArmUpdate,straightArm);
+        break;
+     case 50:
+        arms::setEqual(rightArmUpdate,closed);
+        break;
+     case 51:
+        arms::setEqual(rightArmUpdate,preped);
+        break;
+     case 52:
+        arms::setEqual(rightArmUpdate,barrelDrop);
+        break;
+        
+    }
   }
 
 //State Machine Begginings
