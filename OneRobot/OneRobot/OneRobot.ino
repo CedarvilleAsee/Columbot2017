@@ -53,9 +53,9 @@ void setup(){
 
 
   arms::ArmState init;
-  init.inner = 180;
-  init.outer = 120;
-  init.claw = CLAW_OPEN;
+  init.inner = INNER_CLOSED;
+  init.outer = OUTER_CLOSED;
+  init.claw = CLAW_CLOSED;
   arms::setArmState(rightArm,init);
   arms::setEqual(rightArmUpdate,init); 
   arms::setEqual(rightArmCurrent,init);
@@ -71,11 +71,11 @@ void loop() {
   // declaring armStates for the main to use
   arms::ArmState straightArm;//arm is open and claw is closed
   straightArm.claw = CLAW_CLOSED;
-  straightArm.inner = 90;
+  straightArm.inner = 0;
   straightArm.outer = 10;
   arms::ArmState closed;//arm is closed and claw is open
   closed.claw = CLAW_OPEN;
-  closed.inner = 180;
+  closed.inner = 90;
   closed.outer = 120;
   arms::ArmState preped;//arm is closed and claw is closed
   preped.claw = CLAW_CLOSED;
@@ -85,16 +85,24 @@ void loop() {
   barrelDrop.claw = CLAW_OPEN;
   barrelDrop.inner = 90;
   barrelDrop.outer = 10;
+  arms::ArmState test1;
+  test1.claw = CLAW_OPEN;
+  test1.inner = INNER_OPEN;
+  test1.outer = OUTER_OPEN;
+  arms::ArmState test2;
+  test2.claw = CLAW_CLOSED;
+  test2.inner = INNER_CLOSED;
+  test2.outer = OUTER_CLOSED;
   
 
   double currentTime = (double)(millis());
 
-  if (!isEqual(rightArmCurrent,rightArmUpdate)&& operating==false){
+  if (!isEqual(rightArmCurrent,rightArmUpdate) && operating==false){
     startTime = (double)(millis());
     operating = true;
   }
-  if (operating == true){
-    arms::changeArmPos(rightArmCurrent, rightArmUpdate, rightArm, 500, currentTime, startTime, operating);
+  if (operating == true ){
+    arms::changeArmPos(rightArmCurrent, rightArmUpdate, rightArm, 5000, currentTime, startTime, operating);
   }
 
   if (Serial.available() > 0 && operating == false){
@@ -103,20 +111,54 @@ void loop() {
     Serial.println(command);
     switch (command){
       case 49:
-        arms::setEqual(rightArmUpdate,straightArm);
+        arms::setEqual(rightArmUpdate,test2);
+        
         break;
      case 50:
-        arms::setEqual(rightArmUpdate,closed);
+        arms::setEqual(rightArmUpdate,test1);
+        
         break;
      case 51:
-        arms::setEqual(rightArmUpdate,preped);
+        //arms::setEqual(rightArmUpdate,preped);
+        
         break;
      case 52:
-        arms::setEqual(rightArmUpdate,barrelDrop);
+        //arms::setEqual(rightArmUpdate,barrelDrop);
+        
         break;
+     case 53:
+        
+        break;
+     case 54:
+        
+        break;
+        
         
     }
   }
+  /*if(!operating && false){
+      static int states=0;
+      switch (states){
+        case 0:
+          arms::setEqual(rightArmUpdate,closed);
+          states++;
+          break;
+        case 1:
+          arms::setEqual(rightArmUpdate,straightArm);
+          states++;
+          break;
+        case 2:
+          arms::setEqual(rightArmUpdate, barrelDrop);
+          states++;
+          break;
+        case 3:
+          arms::setEqual(rightArmUpdate,straightArm);
+          states=0;
+          break;
+        
+      }
+    }*/
+}
 
 //State Machine Begginings
   //update Sensors
@@ -185,4 +227,4 @@ void loop() {
 //      }
 //    }
 //  }
-}
+

@@ -15,6 +15,7 @@ namespace states {
   const int DropLastBarrels = 6;
   const int PrepForLastPickup = 7;
   const int PickupLastBarrels = 8;
+  const int GoHome = 9;
 
   const int Waiting = 0;
   const int FirstWall = 1;

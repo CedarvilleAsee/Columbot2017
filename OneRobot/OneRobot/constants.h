@@ -15,18 +15,22 @@ static const int LINE_SENSOR_PINS[NUM_OF_SENSORS] = {LINE_SENSOR_0, LINE_SENSOR_
 
 //Arm servo constants
 
-const int CLAW_CLOSED = 73;
 const int CLAW_OPEN = 95;
+const int CLAW_CLOSED = 73;
+const int OUTER_OPEN = 45;
+const int OUTER_CLOSED = 180;
+const int INNER_OPEN = 90;
+const int INNER_CLOSED = 180;
 
-const int OPEN = 79;
-const int CLOSED = 67;
-const int CLAW = 67;
-const int ARM = 65;
+//const int OPEN = 79;
+//const int CLOSED = 67;
+//const int CLAW = 67;
+//const int ARM = 65;
 
-const int ARMSTATE_CLOSED = 10;
-const int ARMSTATE_PREPED = 11;
-const int ARMSTATE_STRAIGHTARM = 20;
-const int ARMSTATE_BARRELDROP = 21;
+//const int ARMSTATE_CLOSED = 10;
+//const int ARMSTATE_PREPED = 11;
+//const int ARMSTATE_STRAIGHTARM = 20;
+//const int ARMSTATE_BARRELDROP = 21;
 
 
 //enum turn { straight, left, right, slightLeft, slightRight}

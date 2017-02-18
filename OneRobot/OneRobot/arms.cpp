@@ -19,21 +19,28 @@ void arms::setArmState(Arm arm, ArmState armState){
   arm.claw.write(armState.claw);        
 }
 void arms::changeArmPos(ArmState &current, ArmState ending, Arm arm, int t, int currentTime, int startTime, bool &op) {
-    double timeConstant = (currentTime-startTime)/(double)t;
+    double timeConstant = (double)(currentTime-startTime)/(double)t;
     arms::ArmState delta;
+    arms::ArmState newAngle;
     delta.inner = ending.inner - current.inner;
     delta.outer = ending.outer - current.outer;
-    delta.claw = ending.claw - current.claw;
-    arms::ArmState newAngle;
-    Serial.println("Running changeArmPos");
-    if(delta.inner<5 && delta.inner>-5){
-      arms::setEqual(newAngle,ending);
-      op = false;
+    setEqual(newAngle, current);
+    if(delta.inner>0){
+      delta.inner = 0;
+    }
+    else if (delta.inner<0){
+      delta.outer = 0;
+    }
+    int totalDelta = (delta.inner+delta.outer+delta.claw);
+    if (totalDelta>10 /*&& totalDelta<-10*/ ){
+      newAngle.inner = (int)((timeConstant*(double)delta.inner)+(double)current.inner);
+      newAngle.outer = (int)((timeConstant*(double)delta.outer)+(double)current.outer);
+      newAngle.claw = (int)((timeConstant*(double)delta.claw)+(double)current.claw);
+      op = true;
     }
     else{
-      newAngle.inner = (int)(timeConstant*delta.inner+current.inner);
-      newAngle.outer = (int)(timeConstant*delta.outer+current.outer);
-      newAngle.claw = (int)(timeConstant*delta.claw+current.claw);
+      setEqual(newAngle,ending);
+      op = false;      
     }
     arms::setArmState(arm,newAngle);
     arms::setEqual(current,newAngle);
