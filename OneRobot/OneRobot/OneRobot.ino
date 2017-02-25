@@ -8,34 +8,23 @@
 
 using namespace wheels;
 
-Servo firstServe;
-Servo secondServe;
-Servo thridServe;
-Servo fourthServe;
-Servo fifthServe;
-Servo sixthServe;
-Servo seventhServe;
-Servo eightServe;
-Servo ninthServe;
-Servo serve;
-
-arms::ArmState rightArmCurrent;
-arms::ArmState rightArmUpdate;
+int state = 0;
+long startTime = 0;
+long timeOpened;
 arms::Arm rightArm;
 arms::Arm leftArm;
-arms::ArmState leftArmCurrent;
-arms::ArmState leftArmUpdate;
-double startTime = 0;
-bool operating = false;
-int command=0;
-int armStatus=10;
+arms::ArmState closed;
+arms::ArmState midState;
+arms::ArmState preppedToDrop;
+arms::ArmState drop;
+
 
 void setup(){
  
   // put your setup code here, to run once:
-  for (int i = 0; i < NUM_OF_SENSORS; ++i) {
-        pinMode(LINE_SENSOR_PINS[i], INPUT);
-  }
+//  for (int i = 0; i < NUM_OF_SENSORS; ++i) {
+//        pinMode(LINE_SENSOR_PINS[i], INPUT);
+//  }
 
 
   //LEDs on shield
@@ -46,185 +35,63 @@ void setup(){
 
   wheels::initialize();
   arms::initialize(leftArm, rightArm);
-  pinMode(BUTTON1, INPUT_PULLUP);
+  pinMode(BUTTON1, INPUT);
   pinMode(BUTTON2, INPUT);
+  
   Serial.begin(115200);
-  Serial.write("Hello from Robot1!");
 
+  closed.claw = CLAW_CLOSED;
+  closed.inner = INNER_CLOSED;
+  closed.outer = OUTER_CLOSED;
 
-  arms::ArmState init;
-  init.inner = INNER_CLOSED;
-  init.outer = OUTER_CLOSED;
-  init.claw = CLAW_CLOSED;
-  arms::setArmState(rightArm,init);
-  arms::setEqual(rightArmUpdate,init); 
-  arms::setEqual(rightArmCurrent,init);
+  midState.claw = CLAW_CLOSED;
+  midState.inner = INNER_OPEN;
+  midState.outer = OUTER_CLOSED;
 
+  preppedToDrop.claw = CLAW_CLOSED;
+  preppedToDrop.inner = INNER_OPEN;
+  preppedToDrop.outer = OUTER_OPEN;
 
+  drop.claw = CLAW_OPEN;
+  drop.inner = INNER_OPEN;
+  drop.outer = OUTER_OPEN;
 
+  startTime = millis();
 }
 
 
 
 void loop() {
-  
-  // declaring armStates for the main to use
-  arms::ArmState straightArm;//arm is open and claw is closed
-  straightArm.claw = CLAW_CLOSED;
-  straightArm.inner = 0;
-  straightArm.outer = 10;
-  arms::ArmState closed;//arm is closed and claw is open
-  closed.claw = CLAW_OPEN;
-  closed.inner = 90;
-  closed.outer = 120;
-  arms::ArmState preped;//arm is closed and claw is closed
-  preped.claw = CLAW_CLOSED;
-  preped.inner = 180;
-  preped.outer = 120;
-  arms::ArmState barrelDrop;//arm is closed and claw is open
-  barrelDrop.claw = CLAW_OPEN;
-  barrelDrop.inner = 90;
-  barrelDrop.outer = 10;
-  arms::ArmState test1;
-  test1.claw = CLAW_OPEN;
-  test1.inner = INNER_OPEN;
-  test1.outer = OUTER_OPEN;
-  arms::ArmState test2;
-  test2.claw = CLAW_CLOSED;
-  test2.inner = INNER_CLOSED;
-  test2.outer = OUTER_CLOSED;
-  
-
-  double currentTime = (double)(millis());
-
-  if (!isEqual(rightArmCurrent,rightArmUpdate) && operating==false){
-    startTime = (double)(millis());
-    operating = true;
-  }
-  if (operating == true ){
-    arms::changeArmPos(rightArmCurrent, rightArmUpdate, rightArm, 5000, currentTime, startTime, operating);
-  }
-
-  if (Serial.available() > 0 && operating == false){
-    command = Serial.read();
-    Serial.print("I recieved: ");
-    Serial.println(command);
-    switch (command){
-      case 49:
-        arms::setEqual(rightArmUpdate,test2);
-        
-        break;
-     case 50:
-        arms::setEqual(rightArmUpdate,test1);
-        
-        break;
-     case 51:
-        //arms::setEqual(rightArmUpdate,preped);
-        
-        break;
-     case 52:
-        //arms::setEqual(rightArmUpdate,barrelDrop);
-        
-        break;
-     case 53:
-        
-        break;
-     case 54:
-        
-        break;
-        
-        
-    }
-  }
-  /*if(!operating && false){
-      static int states=0;
-      switch (states){
-        case 0:
-          arms::setEqual(rightArmUpdate,closed);
-          states++;
-          break;
-        case 1:
-          arms::setEqual(rightArmUpdate,straightArm);
-          states++;
-          break;
-        case 2:
-          arms::setEqual(rightArmUpdate, barrelDrop);
-          states++;
-          break;
-        case 3:
-          arms::setEqual(rightArmUpdate,straightArm);
-          states=0;
-          break;
-        
+  Serial.println(analogRead(ANALOG_INPUT));
+  switch (state) {
+    case 0: // Initial driving state.
+        setArmState(rightArm, closed);
+        if (digitalRead(BUTTON1) == LOW) {
+          startTime = millis();
+          state++;
+        }
+      break;
+    case 1: // Open elbows; advance to next state after delay.
+      wheels::powerAllWheels(wheels::Forward, 100);
+      setArmState(rightArm, midState);
+      if(millis()-startTime > 500){
+        state++;
+        timeOpened = millis();
       }
-    }*/
+      break;
+    case 2: // Open forearms.
+      wheels::powerAllWheels(wheels::Forward, 100);
+      setArmState(rightArm, preppedToDrop);
+      if (millis() - timeOpened > 5000) {
+        state++;
+      }
+      break;
+    case 3: // Drop barrels after 
+      wheels::powerAllWheels(wheels::Forward, 100);
+      setArmState(rightArm, drop);
+      break;
+    case 4:
+      break;
+  }
 }
-
-//State Machine Begginings
-  //update Sensors
-  //update Arms
-  //update wheels
-
-//  setArmState(rightArm,closed);
-
-
-  // Toggle between all the armStatuss
-  
-//  int button1 = digitalRead(BUTTON1);
-//  if (button1 > 0){
-//    lastButton1 = button1;
-//    lastButton2 = 0;
-//  }
-//  int button2 = digitalRead(BUTTON2);
-//  if (button2>0){
-//    lastButton2 = button2;
-//    lastButton1 = 0;
-//  }
-//
-//  if (lastButton1 > 0 && armStatus < 20 ) {
-//    setArmState(rightArm, straightArm);
-//    armStatus = ARMSTATE_STRAIGHTARM;
-//  }
-//  else if (lastButton1>0 && armStatus == ARMSTATE_STRAIGHTARM){
-//    setArmState(rightArm, barrelDrop);
-//    armStatus = ARMSTATE_BARRELDROP;
-//  }
-//  else if (lastButton2>0 && armStatus >=20){
-//    setArmState(rightArm, closed);
-//    armStatus = ARMSTATE_CLOSED;//represents a closed state with open claw
-//  }
-//  else if (lastButton2>0 && armStatus == ARMSTATE_CLOSED){
-//    setArmState(rightArm, preped);
-//    armStatus = ARMSTATE_PREPED;
-//  }
-
-
-
-
-//  if (button1 != lastButton1) {
-//    lastButton1 = button1;
-//    if (button1 == LOW) {
-//      if (isArmOpen) {
-//        isArmOpen = false;
-//        setArmState(rightArm, readyToCatch);
-//      }
-//      else {
-//        isArmOpen = true;
-//        setArmState(rightArm, preDrop);
-//      }
-//    }
-//  }
-//  if (button2 != lastButton2) {
-//    lastButton2 = button2;
-//    if (button2 == LOW) {
-//      if (isClawOpen) {
-//        isClawOpen = false;
-//        setArmState(rightArm, barrelCatch);
-//      }
-//      else {
-//        isClawOpen = true;
-//        setArmState(rightArm, barrelDrop);        
-//      }
-//    }
-//  }
 

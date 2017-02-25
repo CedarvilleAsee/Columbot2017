@@ -6,7 +6,9 @@
 
 namespace states {
 
-  const int InitialDrive = 0;
+  const int InitDrive = 0;
+  const int InitDrive2 = 1;
+  const int InitDrive3 = 2;
   const int DropFirstBarrels = 1;
   const int PickupFirstBarrels = 2;
   const int LoadLeftBarrel = 3;
