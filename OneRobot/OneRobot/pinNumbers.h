@@ -13,7 +13,7 @@
 
 
 // pins of line sensors
-#define LINE_SENSOR_0     39
+#define LINE_SENSOR_0 39
 #define LINE_SENSOR_1     41
 #define LINE_SENSOR_2     43
 #define LINE_SENSOR_3     45  
@@ -56,6 +56,9 @@
 #define RIGHT_OUTER_ARM 12 
 #define LEFT_CLAW  10
 #define RIGHT_CLAW 13
+
+// Claw sensors
+#define ANALOG_INPUT A0
 
 
 
