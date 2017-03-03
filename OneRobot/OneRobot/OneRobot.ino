@@ -9,22 +9,22 @@
 using namespace wheels;
 
 int state = 0;
-long startTime = 0;
+long runStartTime = 0;
+long stateStartTime = 0;
 long timeOpened;
 arms::Arm rightArm;
 arms::Arm leftArm;
-arms::ArmState closed;
-arms::ArmState midState;
-arms::ArmState preppedToDrop;
-arms::ArmState drop;
+arms::ArmState armsFoldedIn;
+arms::ArmState elbowsOpen;
+arms::ArmState armsPreppedToDrop;
+arms::ArmState clawsOpened;
 
+void goToState(int targetState) {
+  state = targetState;
+  stateStartTime = millis();
+}
 
 void setup(){
- 
-  // put your setup code here, to run once:
-//  for (int i = 0; i < NUM_OF_SENSORS; ++i) {
-//        pinMode(LINE_SENSOR_PINS[i], INPUT);
-//  }
 
 
   //LEDs on shield
@@ -40,23 +40,23 @@ void setup(){
   
   Serial.begin(115200);
 
-  closed.claw = CLAW_CLOSED;
-  closed.inner = INNER_CLOSED;
-  closed.outer = OUTER_CLOSED;
+  armsFoldedIn.claw = CLAW_CLOSED;
+  armsFoldedIn.inner = INNER_CLOSED;
+  armsFoldedIn.outer = OUTER_CLOSED;
 
-  midState.claw = CLAW_CLOSED;
-  midState.inner = INNER_OPEN;
-  midState.outer = OUTER_CLOSED;
+  elbowsOpen.claw = CLAW_CLOSED;
+  elbowsOpen.inner = INNER_OPEN;
+  elbowsOpen.outer = OUTER_CLOSED;
 
-  preppedToDrop.claw = CLAW_CLOSED;
-  preppedToDrop.inner = INNER_OPEN;
-  preppedToDrop.outer = OUTER_OPEN;
+  armsPreppedToDrop.claw = CLAW_CLOSED;
+  armsPreppedToDrop.inner = INNER_OPEN;
+  armsPreppedToDrop.outer = OUTER_OPEN;
 
-  drop.claw = CLAW_OPEN;
-  drop.inner = INNER_OPEN;
-  drop.outer = OUTER_OPEN;
+  clawsOpened.claw = CLAW_OPEN;
+  clawsOpened.inner = INNER_OPEN;
+  clawsOpened.outer = OUTER_OPEN;
 
-  startTime = millis();
+  runStartTime = millis();
 }
 
 
@@ -64,33 +64,57 @@ void setup(){
 void loop() {
   Serial.println(analogRead(ANALOG_INPUT));
   switch (state) {
-    case 0: // Initial driving state.
-        setArmState(rightArm, closed);
-        if (digitalRead(BUTTON1) == LOW) {
-          startTime = millis();
-          state++;
-        }
-      break;
-    case 1: // Open elbows; advance to next state after delay.
-      wheels::powerAllWheels(wheels::Forward, 100);
-      setArmState(rightArm, midState);
-      if(millis()-startTime > 500){
-        state++;
-        timeOpened = millis();
+
+    // The initial state of the robot at the start of the run.
+    // Makes sure the arms are folded in and the wheels are not driving.
+    // Exits when a button is pressed.
+    case 0:
+      setArmState(rightArm, armsFoldedIn);
+      if (digitalRead(BUTTON1) == LOW) {
+        runStartTime = millis();
+        goToState(1);
       }
       break;
-    case 2: // Open forearms.
+
+    // The robot goes from the starting position to partway along the open fairway.
+    // Powers the wheels forward.
+    // Exits after a short time (half a second).
+    case 1:
       wheels::powerAllWheels(wheels::Forward, 100);
-      setArmState(rightArm, preppedToDrop);
-      if (millis() - timeOpened > 5000) {
-        state++;
+      if (millis() - stateStartTime > 500) {
+        goToState(2);
+      }
+
+    // We are out in the open, and we need to open the arms, but we can't just swing the arms wide open.
+    // Powers wheels forward. Opens elbows.
+    // Exits after short time (half a second).
+    case 2:
+      wheels::powerAllWheels(wheels::Forward, 100);
+      setArmState(rightArm, elbowsOpen);
+      if(millis()-stateStartTime > 500){
+        goToState(3);
       }
       break;
-    case 3: // Drop barrels after 
+
+    // We are getting closer to the first islands. We need to prepare to drop the barrels.
+    // Power wheels forward. Open forearms and claws.
+    // Exits after detecting an island.
+    // TODO: At the moment, this state exits after a time delay because we do not have island sensors yet.
+    case 3:
       wheels::powerAllWheels(wheels::Forward, 100);
-      setArmState(rightArm, drop);
+      setArmState(rightArm, elbowsOpen);
+      if (millis() - stateStartTime > 5000) {
+        goToState(4);
+      }
       break;
+
+    // We are at the islands and need to drop the barrels. We also need to make it possible to pick up the next barrels.
+    // Power wheels forward. Open claw to drop barrels.
+    // Exits immediately because barrels can be dropped immediately.
+    // TODO: Evaluate whether this needs to be a separate state. Since it exits immediately, it could be done in the previous state.
     case 4:
+      wheels::powerAllWheels(wheels::Forward, 100);
+      setArmState(rightArm, clawsOpened);
       break;
   }
 }
