@@ -6,30 +6,27 @@
 
 namespace arms {
 
-   struct ArmState {//this needs to be rewritten into a class with member functions
-      //ArmState refers to the pos of the servor
-      int inner;
-      int outer;
-      int claw;
-   };
+  class ArmPosition {
+  public:
+    int inner;
+    int outer;
+    int claw;
+    ArmPosition(int inner, int outer, int claw);
+  };
 
-   struct Arm {
-    //Arm refers to the servo 
+  class Arm {
+  private:
     Servo inner;
     Servo outer;
-    Servo claw;
-   };
+    Servo claw;  
+    
+  public:    
+    Arm(int innerPin, int outerPin, int clawPin);
 
-   bool isEqual(ArmState arm1, ArmState arm2);
-  void setEqual(ArmState &arm1, ArmState arm2);
+    void setPosition(ArmPosition armPos);
+  };
 
-  void changeArmPos(ArmState &current, ArmState ending, Arm arm, int t, int currentTime, int startTime, bool &op);
-
-   
-  //initailize sets up the servos
    void initialize(Arm leftArm, Arm rightArm);
-  //setArmState sets the servos to the appropriate angles
-   void setArmState(Arm arm, ArmState armState);
 
    
 

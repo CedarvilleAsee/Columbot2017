@@ -31,7 +31,11 @@ namespace wheels {
   void powerAllWheels(WheelDirection direction, int speed);
 
   // Convenience method for stop the robot.
-  void stopAllWheels();
+  void brake();
+
+  void goForward(int speed);
+
+  void goBackward(int speed);
 
 	// description: drives the motors
 	// speed: max speed of the motors
