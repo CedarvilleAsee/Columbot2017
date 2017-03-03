@@ -18,12 +18,12 @@ long runStartTime = 0;
 long stateStartTime = 0;
 
 // Possible arm positions.
-arms::Arm leftArm(LEFT_INNER_ARM, LEFT_OUTER_ARM, LEFT_CLAW);
-arms::Arm rightArm(RIGHT_INNER_ARM, RIGHT_OUTER_ARM, RIGHT_CLAW);
-arms::ArmPosition armsFoldedIn(CLAW_CLOSED, INNER_CLOSED, OUTER_CLOSED);
-arms::ArmPosition elbowsOpen(CLAW_CLOSED, INNER_OPEN, OUTER_CLOSED);
-arms::ArmPosition armsPreppedToDrop(CLAW_CLOSED, INNER_OPEN, OUTER_OPEN);
-arms::ArmPosition clawsOpened(CLAW_OPEN, INNER_OPEN, OUTER_OPEN);
+Arm leftArm(LEFT_INNER_ARM, LEFT_OUTER_ARM, LEFT_CLAW);
+Arm rightArm(RIGHT_INNER_ARM, RIGHT_OUTER_ARM, RIGHT_CLAW);
+ArmPosition armsFoldedIn(CLAW_CLOSED, INNER_CLOSED, OUTER_CLOSED);
+ArmPosition elbowsOpen(CLAW_CLOSED, INNER_OPEN, OUTER_CLOSED);
+ArmPosition armsPreppedToDrop(CLAW_CLOSED, INNER_OPEN, OUTER_OPEN);
+ArmPosition clawsOpened(CLAW_OPEN, INNER_OPEN, OUTER_OPEN);
 
 
 // TODO: Evaluate need for this function.
