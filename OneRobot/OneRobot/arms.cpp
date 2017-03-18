@@ -17,4 +17,3 @@ void Arm::setPosition(ArmPosition armPos){
 
 ArmPosition::ArmPosition(int inner, int outer, int claw) : inner(inner), outer(outer), claw(claw) {
 }
-
