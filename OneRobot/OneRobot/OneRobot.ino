@@ -84,12 +84,12 @@ void loop() {
       break;
 
     // We are getting closer to the first islands. We need to prepare to drop the barrels.
-    // Power wheels forward. Open forearms and claws.
+    // Power wheels forward. Open forearms.
     // Exits after detecting an island.
     // TODO: At the moment, this state exits after a time delay because we do not have island sensors yet.
     case 3:
       wheels::goForward(FULL_SPEED);
-      rightArm.setPosition(elbowsOpen);
+      rightArm.setPosition(armsPreppedToDrop);
       if (millis() - stateStartTime > 5000) {
         goToState(4);
       }
@@ -109,15 +109,195 @@ void loop() {
 
     // We need to pick up the barrels. We may be moving to quickly, so we will slow down.
     // Power wheels forward at slower speed. Move arms to barrel pickup position.
-    // Exits when the claw sensors detect a barrel coming close enough to the claw.
+    // Exits when a claw sensor detects a barrel coming close enough to the claw.
+    // NOTE: States fork based on which claw grabs first.
     // TODO: Get sensors to work. Make a good armPosition for this state.
     case 5:
       wheels::goForward(HALF_SPEED);
       rightArm.setPosition(/*armsReadyToPickup*/clawsOpened);
-      if (millis() - stateStartTime > 1000) {
+      if (millis() - stateStartTime > 1000) {//right
         goToState(6);
       }
+      if (millis() - stateStartTime > 1000) {//left
+        goToState(7);
+      }
       break;
+
+    // The foillowing states are forked and similar
+    // Powering wheels forward at slower speed. One state picks up left. One state picks up right.
+    // Exits when the oposite barrel is picked up.
+
+    // We have picked up the right barrel and are waiting for the right barrel.
+    // Powering wheels medium speed; wait for left barrel.
+    // Exits when left barrel sensed
+    case 6:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(/*close right*/clawsOpened);
+      if (millis() - stateStartTime > 1000) {//picks up left
+        rightArm.setPosition(armsPreppedToDrop);
+        goToState(8);
+      }
+      break;
+
+    // We have picked up the left barrel and are waiting for the right barrel.
+    // Powering wheels medium speed; wait for right barrel.
+    // Exits when right barrel sensed.
+    case 7:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(/*close left*/clawsOpened);
+      if (millis() - stateStartTime > 1000) {//picks up right
+        rightArm.setPosition(armsPreppedToDrop);
+        goToState(8);
+      }
+      break;
+
+    // We picked up both barrels and we are bringing them into chasis
+    // Powering wheels medium speed, bringing arms in at elbows, preped to kick barrel waiting for center island
+    // Exits when island is sensed
+    case 8:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(elbowsOpen);
+      kicker.getReady();
+      if (millis() - stateStartTime > 1000) {//detects center island
+        goToState(9);
+      }
+      break;
+
+    // We have detected center island
+    // Powering all wheels medium speed, bring arms in final state, kicking barrel,
+    // Exits after small time
+    case 9:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(armsFoldedIn);
+      kicker.kick();
+      if (millis() - stateStartTime > 1000) {//detect exit island
+        goToState(10);
+      }
+      break;
+
+    case 10:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(armsChasisDeposit);
+      if (millis() - stateStartTime > 1000) {//small delay
+        goToState(11);
+      }
+      break;
+      
+    // We are waiting for second center island 
+    // Powering all wheels full speed, drop mouse trap 2, prep to kick again, deposit barrels
+    // Exits when island is sensed
+    case 11:
+      wheels::goForward(FULL_SPEED);
+      rightArm.setPosition(armsPickupFromArm);
+      kicker.getReady();
+      mousetrap2.deploy();
+      if (millis() - stateStartTime > 1000) {//detect island
+        goToState(12);
+      }
+      break;
+
+    case 12:
+      wheels::goForward(FULL_SPEED);
+      kicker.kick();
+      rightArm.setPosition(elbowsOpen);
+      if (millis() - stateStartTime > 1000) {//dectect end of island
+        goToState(13);
+      }
+      break;
+
+    
+
+    case 13:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(armsPreppedToDrop);
+      if (millis() - stateStartTime > 500) {//small delay
+        goToState(14);
+      }
+      break;
+
+    case 14:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(clawsOpened);
+      if (millis() - stateStartTime > 500) {//small delay
+        goToState(15);
+      }
+      break;
+
+    case 15:
+      wheels::goForward(HALF_SPEED);
+      rightArm.setPosition(lastPickupSetup);
+      if (millis() - stateStartTime > 500) {//sense back wall
+        goToState(16);
+      }
+      break;
+
+    case 16:
+      wheels::brake();
+      rightArm.setPosition(lastPickup);
+      if (millis() - stateStartTime > 500) {
+        goToState(17);
+      }
+      break;
+
+    case 17:
+      wheels::goBackward(FULL_SPEED);
+      rightArm.setPosition(elbowsOpen);
+      if (millis() - stateStartTime > 500) {
+        goToState(18);
+      }
+      break;
+      
+    case 18:
+      wheels::goBackward(FULL_SPEED);
+      rightArm.setPosition(armsFoldedIn);
+      if (millis() - stateStartTime > 500) {
+        goToState(19);
+      }
+      break;
+
+            
+    case 19:
+      wheels::goBackward(FULL_SPEED);
+      rightArm.setPosition(armsChasisDeposit);
+      if (millis() - stateStartTime > 500) {
+        goToState(20);
+      }
+      break;
+
+      
+    case 20:
+      wheels::goBackward(FULL_SPEED);
+      rightArm.setPosition(armsFoldedIn);
+      if (millis() - stateStartTime > 500) {
+        goToState(21);
+      }
+      break;
+
+    case 21:
+      wheels::goBackward(FULL_SPEED);
+      // deposit mousetraps
+      if (millis() - stateStartTime > 500) {
+        goToState(22);
+      }
+      break;
+
+    case 22:
+      wheels::goBackward(FULL_SPEED);
+      // reset all stuff.
+      if (millis() - stateStartTime > 500) {// Waiting for back wall
+        goToState(22);
+      }
+      break;
+
+    case 23:
+      wheels::goBackward(FULL_SPEED);
+      // Deploy barrels to home.
+      if (millis() - stateStartTime > 2000) {
+        // Serve root beer floats
+      }
+      break;
+
+    // TODO: Hammer out micro arm states.
   }
 }
 
