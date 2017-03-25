@@ -49,13 +49,17 @@
 #define WHEEL_PWM_FIRST_STBY  31
 #define WHEEL_PWM_SECOND_STBY  33
 
-//Arm pins 
+//Arm pins
 #define LEFT_INNER_ARM  6
 #define RIGHT_INNER_ARM 11
 #define LEFT_OUTER_ARM  9
 #define RIGHT_OUTER_ARM 12 
 #define LEFT_CLAW  10
 #define RIGHT_CLAW 13
+
+//Utility pins
+#define KICKER 5
+#define DUMPER 4
 
 // Claw sensors
 #define ANALOG_INPUT A0
