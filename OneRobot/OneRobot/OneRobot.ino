@@ -5,7 +5,7 @@
 #include "constants.h"
 #include "wheels.h"
 #include "arms.h"
-#include "kicker.h"
+#include "centralServos.h"
 
 using namespace wheels;
 
@@ -33,8 +33,13 @@ ArmPosition armsPickupFromArm(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
 ArmPosition lastPickupSetup(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
 ArmPosition lastPickup(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
 
-//kicker
+// Kicker
 Kicker kicker(KICKER);
+
+// Mousetraps
+Mousetrap leftMousetrap(LEFT_MOUSETRAP);
+Mousetrap rightMousetrap(RIGHT_MOUSETRAP);
+
 
 
 // TODO: Evaluate need for this function.
@@ -90,6 +95,7 @@ void loop() {
     case 2:
       wheels::goForward(FULL_SPEED);
       rightArm.setPosition(elbowsOpen);
+      leftMousetrap.deploy();
       if(millis()-stateStartTime > 500){
         goToState(3);
       }
@@ -202,7 +208,7 @@ void loop() {
       wheels::goForward(FULL_SPEED);
       rightArm.setPosition(armsPickupFromArm);
       kicker.getReady();
-//      mousetrap2.deploy();
+      rightMousetrap.deploy();
       if (millis() - stateStartTime > 1000) {//detect island
         goToState(12);
       }
@@ -287,7 +293,8 @@ void loop() {
 
     case 21:
       wheels::goBackward(FULL_SPEED);
-      // deposit mousetraps
+      leftMoustrap.deposit();
+      rightMousetrap.deposit();
       if (millis() - stateStartTime > 500) {
         goToState(22);
       }
@@ -303,7 +310,7 @@ void loop() {
 
     case 23:
       wheels::goBackward(FULL_SPEED);
-      // Deploy barrels to home.
+      dumperDump();
       if (millis() - stateStartTime > 2000) {
         goToState(24);
       }
