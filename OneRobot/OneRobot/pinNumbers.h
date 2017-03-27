@@ -11,7 +11,6 @@
 #define WHEEL_DIR_FL_B     35
 #define WHEEL_DIR_FL_F     37
 
-
 // pins of line sensors
 #define LINE_SENSOR_0 39
 #define LINE_SENSOR_1     41
@@ -49,7 +48,7 @@
 #define WHEEL_PWM_FIRST_STBY  31
 #define WHEEL_PWM_SECOND_STBY  33
 
-//Arm pins 
+// Arm pins
 #define LEFT_INNER_ARM  6
 #define RIGHT_INNER_ARM 11
 #define LEFT_OUTER_ARM  9
@@ -57,10 +56,16 @@
 #define LEFT_CLAW  10
 #define RIGHT_CLAW 13
 
-// Claw sensors
-#define ANALOG_INPUT A0
+// Utility pins
+#define KICKER 5
+#define DUMPER 4
+#define LEFT_MOUSETRAP 40000
+#define RIGHT_MOUSETRAP 40001
 
-
-
+// Sensors
+#define RIGHT_CLAW_SENSOR A0
+#define LEFT_CLAW_SENSOR A1
+#define FRONT_SENSOR A2
+#define BACK_SENSOR A3
 
 #endif 

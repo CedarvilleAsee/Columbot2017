@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "wheels.h"
 #include "arms.h"
+#include "centralServos.h"
 
 using namespace wheels;
 
@@ -17,13 +18,28 @@ long runStartTime = 0;
 // The time that the current state was entered.
 long stateStartTime = 0;
 
-// Possible arm positions.
 Arm leftArm(LEFT_INNER_ARM, LEFT_OUTER_ARM, LEFT_CLAW);
 Arm rightArm(RIGHT_INNER_ARM, RIGHT_OUTER_ARM, RIGHT_CLAW);
+
+// Possible arm positions.
 ArmPosition armsFoldedIn(CLAW_CLOSED, INNER_CLOSED, OUTER_CLOSED);
 ArmPosition elbowsOpen(CLAW_CLOSED, INNER_OPEN, OUTER_CLOSED);
 ArmPosition armsPreppedToDrop(CLAW_CLOSED, INNER_OPEN, OUTER_OPEN);
 ArmPosition clawsOpened(CLAW_OPEN, INNER_OPEN, OUTER_OPEN);
+
+// Change to correct configurations.
+ArmPosition armsChasisDeposit(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
+ArmPosition armsPickupFromArm(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
+ArmPosition lastPickupSetup(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
+ArmPosition lastPickup(CLAW_OPEN, OUTER_CLOSED, INNER_CLOSED);
+
+// Kicker
+Kicker kicker(KICKER);
+
+// Mousetraps
+Mousetrap leftMousetrap(LEFT_MOUSETRAP);
+Mousetrap rightMousetrap(RIGHT_MOUSETRAP);
+
 
 
 // TODO: Evaluate need for this function.
@@ -57,6 +73,7 @@ void loop() {
     // Exits when a button is pressed.
     case 0:
       rightArm.setPosition(armsFoldedIn);
+      kicker.getReady();
       if (digitalRead(BUTTON1) == LOW) {
         runStartTime = millis();
         goToState(1);
@@ -78,6 +95,7 @@ void loop() {
     case 2:
       wheels::goForward(FULL_SPEED);
       rightArm.setPosition(elbowsOpen);
+      leftMousetrap.deploy();
       if(millis()-stateStartTime > 500){
         goToState(3);
       }
@@ -190,7 +208,7 @@ void loop() {
       wheels::goForward(FULL_SPEED);
       rightArm.setPosition(armsPickupFromArm);
       kicker.getReady();
-      mousetrap2.deploy();
+      rightMousetrap.deploy();
       if (millis() - stateStartTime > 1000) {//detect island
         goToState(12);
       }
@@ -275,7 +293,8 @@ void loop() {
 
     case 21:
       wheels::goBackward(FULL_SPEED);
-      // deposit mousetraps
+      leftMoustrap.deposit();
+      rightMousetrap.deposit();
       if (millis() - stateStartTime > 500) {
         goToState(22);
       }
@@ -285,19 +304,20 @@ void loop() {
       wheels::goBackward(FULL_SPEED);
       // reset all stuff.
       if (millis() - stateStartTime > 500) {// Waiting for back wall
-        goToState(22);
+        goToState(23);
       }
       break;
 
     case 23:
       wheels::goBackward(FULL_SPEED);
-      // Deploy barrels to home.
+      dumperDump();
       if (millis() - stateStartTime > 2000) {
-        // Serve root beer floats
+        goToState(24);
       }
       break;
-
-    // TODO: Hammer out micro arm states.
+    case 24:
+      wheels::brake();
+      break;
   }
 }
 
