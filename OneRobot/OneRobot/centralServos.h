@@ -22,7 +22,7 @@ class Mousetrap {
     Mousetrap(int trapPin);
     void deploy();
     void deposit();
-}
+};
 
 void dumperDump();
 

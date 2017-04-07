@@ -11,21 +11,21 @@ const int INNER_OPEN = 95;
 const int INNER_CLOSED = 180;
 
 // Kicker angles
-const int KICKER_READY = 15;
-const int KICKER_KICKED = 45;
+const int KICKER_READY = 70;
+const int KICKER_KICKED = 100;
 
 // Dumper angle
 const int DUMPER_DUMPED = 45;
 
 // Mousetrap positions
-const int MOUSETRAP_DEPLOYED = 45;
-const int MOUSETRAP_DEPOSITED = 15;
+const int MOUSETRAP_DEPLOYED = 0;
+const int MOUSETRAP_DEPOSITED = 45;
 
 // Speed levels
 
-const int FULL_SPEED = 100;
-const int HALF_SPEED = 50;
-const int SLOW_SPEED = 10;
+const int FULL_SPEED = 70;
+const int HALF_SPEED = 70;
+const int SLOW_SPEED = 50;
 
 // Sensor threshold
 const int CLAW_SENSOR_THRESHOLD = 100;

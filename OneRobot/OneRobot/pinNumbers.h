@@ -59,8 +59,8 @@
 // Utility pins
 #define KICKER 5
 #define DUMPER 4
-#define LEFT_MOUSETRAP 40000
-#define RIGHT_MOUSETRAP 40001
+#define LEFT_MOUSETRAP A5
+#define RIGHT_MOUSETRAP A4
 
 // Sensors
 #define RIGHT_CLAW_SENSOR A0
